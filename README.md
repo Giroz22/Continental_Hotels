@@ -13,6 +13,8 @@ Turismo
 - Alejandro Giraldo
 - Santiago Andres Lara
 - Tatiana Maldonado Pérez
+- Cristian Camilo Manco Correa
+- Juan Camilo Atehortua Herrera
 
 ### Proyecto
 
