@@ -58,3 +58,8 @@ El proyecto está dirigido a Continental Hotels y sus equipos administrativos y 
 12. Generación de informes estadísticos sobre reservas.
 13. Generación de reportes de reservas en diferentes formatos.
 14. Generación de reportes personalizados para huéspedes.
+
+---
+
+## TRELLO
+https://trello.com/b/EIHC6xAF/equipo-4
