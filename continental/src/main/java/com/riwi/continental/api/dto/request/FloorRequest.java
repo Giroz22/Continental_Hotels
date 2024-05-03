@@ -1,4 +1,4 @@
-package com.riwi.continental.api.dto.request.Hotel_Floor;
+package com.riwi.continental.api.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

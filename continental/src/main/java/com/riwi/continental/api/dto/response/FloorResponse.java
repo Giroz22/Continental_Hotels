@@ -1,6 +1,4 @@
-package com.riwi.continental.api.dto.response.Hotel_Floor;
-
-import com.riwi.continental.domain.entities.Hotel;
+package com.riwi.continental.api.dto.response;
 
 //import java.util.List;
 
@@ -21,5 +19,5 @@ public class FloorResponse {
   private int numberOfRooms;
   private StatusFloor statusFloor;
   // private List<Room> rooms;
-  private Hotel hotel;
+  private HotelToFloorResponse hotelToFloorResponse;
 }

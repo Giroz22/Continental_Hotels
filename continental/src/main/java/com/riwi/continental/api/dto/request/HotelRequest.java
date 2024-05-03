@@ -1,8 +1,4 @@
-package com.riwi.continental.api.dto.response.Hotel_Floor;
-
-import java.util.List;
-
-import com.riwi.continental.domain.entities.Floor;
+package com.riwi.continental.api.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,13 +9,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HotelResponse {
-  private String id;
+public class HotelRequest {
+
   private String name;
+
   private String location;
+
   private String contact;
+
   private double calification;
-  private double earnings;
+
   private int numberOfFloors;
-  private List<Floor> floors;
+
 }
