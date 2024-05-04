@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.riwi.continental.api.dto.request.CustomerRequest;
 import com.riwi.continental.api.dto.response.CustomerResponse;
+import com.riwi.continental.domain.entities.Booking;
 import com.riwi.continental.domain.entities.Customer;
 import com.riwi.continental.domain.repositories.CustomerRepository;
 import com.riwi.continental.infrastructure.abstract_services.ICustomerService;
@@ -56,7 +57,19 @@ public class CustomerService implements ICustomerService{
   private CustomerResponse entityToResponse(Customer entity){
     CustomerResponse response = new CustomerResponse();
     BeanUtils.copyProperties(entity, response);
+    //response.setBookings(entity.getBookings().stream().map(booking -> this.bookingToResponse(booking)).collect(collectors.toList()));
     return response;
   }
+
+  // private BookingToCustomerResponse bookingToResponse (Booking entity) {
+  //   BookingToCustomerResponse response = new BookingToCustomerResponse ();
+
+  //   BeanUtils.copyProperties(entity, response);
+
+  //   return response;
+  // }
+
+  //debe sarlir una lista en booking todas las reservas que tiene el cliente
+
 
 }
