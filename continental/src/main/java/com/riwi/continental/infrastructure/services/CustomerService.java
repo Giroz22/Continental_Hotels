@@ -45,9 +45,10 @@ public class CustomerService implements ICustomerService{
   }
 
   @Override
-  public CustomerResponse update(CustomerRequest entity) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'update'");
+  public CustomerResponse update(CustomerRequest request, String id) {
+    Customer customerToUpdate = this.find(id);
+    Customer customer = this.requestToEntity(request, customerToUpdate);
+    return this.entityToResponse(this.customerRepository.save(customer));
   }
 
   @Override
