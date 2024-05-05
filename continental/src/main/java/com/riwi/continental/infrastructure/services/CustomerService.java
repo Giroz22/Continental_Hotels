@@ -1,5 +1,7 @@
 package com.riwi.continental.infrastructure.services;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,9 +39,9 @@ public class CustomerService implements ICustomerService{
   }
 
   @Override
-  public CustomerResponse create(CustomerRequest entity) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'create'");
+  public CustomerResponse create(CustomerRequest request) {
+    Customer customer = this.requestToEntity(request, new Customer());
+    return this.entityToResponse(this.customerRepository.save(customer));
   }
 
   @Override
@@ -70,6 +72,17 @@ public class CustomerService implements ICustomerService{
   // }
 
   //debe sarlir una lista en booking todas las reservas que tiene el cliente
+
+  private Customer requestToEntity(CustomerRequest entity, Customer customer){
+    customer.setName(entity.getName());
+    customer.setLastname(entity.getLastname());
+    customer.setAge(entity.getAge());
+    customer.setIdDocument(entity.getIdDocument());
+    customer.setCellphone(entity.getCellphone());
+    //customer.setBookings(new ArrayList<>());
+
+    return customer;
+  }
 
 
 }
