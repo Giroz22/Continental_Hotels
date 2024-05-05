@@ -38,8 +38,8 @@ private int age;
 private AgeCategory ageCategory;
 
 
-@ManyToOne(fetch = FetchType.LAZY)
-@JoinColumn(name = "booking_id" , referencedColumnName = "id")
-private Booking booking;
+// @ManyToOne(fetch = FetchType.LAZY)
+// @JoinColumn(name = "booking_id" , referencedColumnName = "id")
+// private Booking booking;
 
 }
