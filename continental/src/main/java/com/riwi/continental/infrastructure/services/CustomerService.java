@@ -34,8 +34,8 @@ public class CustomerService implements ICustomerService{
 
   @Override
   public CustomerResponse findById(String id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    Customer customer = this.find(id);
+    return this.entityToResponse(customer);
   }
 
   @Override
@@ -52,8 +52,8 @@ public class CustomerService implements ICustomerService{
 
   @Override
   public void delete(String id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    Customer customer = this.find(id);
+    this.customerRepository.delete(customer);
   }
 
   private CustomerResponse entityToResponse(Customer entity){
@@ -84,5 +84,8 @@ public class CustomerService implements ICustomerService{
     return customer;
   }
 
+  private Customer find(String id){
+    return this.customerRepository.findById(id).orElseThrow();
+  }
 
 }
