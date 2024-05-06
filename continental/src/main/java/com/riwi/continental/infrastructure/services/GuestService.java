@@ -58,8 +58,8 @@ public class GuestService  implements IGuestService{
 
   @Override
   public void delete(String id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    Guest guest = this.find(id);
+    this.guestRepository.delete(guest);
   }
 
   private GuestResponse entityToResponse(Guest entity){

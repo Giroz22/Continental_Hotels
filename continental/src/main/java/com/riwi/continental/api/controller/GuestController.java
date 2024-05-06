@@ -1,7 +1,11 @@
 package com.riwi.continental.api.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,4 +48,16 @@ public class GuestController {
   ){
     return ResponseEntity.ok(this.iGuestService.findById(id));
   }
+
+  @DeleteMapping(path = "/{id}")
+  public ResponseEntity<Map<String, String>> delete(
+    @PathVariable String id){
+      Map<String, String> response = new HashMap<>();
+
+      response.put("message","guest successfully removed");
+
+      this.iGuestService.delete(id);
+
+      return ResponseEntity.ok(response);
+    }
 }
