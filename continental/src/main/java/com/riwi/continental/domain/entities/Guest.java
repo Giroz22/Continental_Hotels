@@ -25,6 +25,9 @@ public class Guest {
 @GeneratedValue(strategy = GenerationType.UUID)
 private String id;
 
+@Column(length = 15, nullable = false)
+private String idDocument;
+
 @Column(length = 45, nullable = false)
 private String name;
 

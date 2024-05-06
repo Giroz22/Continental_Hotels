@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GuestRequest {
+  private String idDocument;
   private String name;
   private String lastname;
   private int age;
