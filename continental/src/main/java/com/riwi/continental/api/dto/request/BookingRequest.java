@@ -1,5 +1,8 @@
 package com.riwi.continental.api.dto.request;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import com.riwi.continental.util.enums.StatusBooking;
 
 import jakarta.validation.constraints.NotBlank;
@@ -12,12 +15,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookingRequest<LocalDate> {
+public class BookingRequest {
 
 
-    @NotBlank(message = "La fecha de ingreso es requerida")
-    private LocalDate fecha_ingreso;
-    @NotBlank(message = "La fecha de salida es requerida")
-    private LocalDate fecha_salida;
+    private Double price;
+    // @NotBlank(message = "The admision date is required")
+    private LocalDate admissionDate;
+    // @NotBlank(message = "The departure date is required")
+    private LocalDate departureDate;
+    private LocalTime departureTime;
+    private LocalTime admissionTime;
+    private StatusBooking status;
     
 }

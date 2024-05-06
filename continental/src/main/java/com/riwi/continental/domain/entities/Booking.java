@@ -19,7 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity(name = "booking")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,12 +29,12 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private Double valor;
-    private StatusBooking estado;
-    private LocalDate fecha_ingreso;
-    private LocalDate fecha_salida;
-    private LocalTime hora_entrada;
-    private LocalTime hora_salida;
+    private Double price;
+    private StatusBooking status;
+    private LocalDate admissionDate;
+    private LocalDate departureDate;
+    private LocalTime admissionTime;
+    private LocalTime departureTime;
 
     // @OneToMany
     // @JoinColumn(mappeBy = "booking", fetch = FetchType.EAGER)

@@ -19,7 +19,8 @@ import lombok.AllArgsConstructor;
 
 public class BookingService  implements IBookingService{
 
-    private final BookingRepository bookingRepository = null;
+    @Autowired
+    private final BookingRepository bookingRepository ;
 
     @Override
     
@@ -33,8 +34,8 @@ public class BookingService  implements IBookingService{
 
     @Override
     public BookingResponse findById(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        Booking booking = this.find(id);
+        return this.entityToResponse(booking);
     }
 
     @Override
@@ -74,12 +75,12 @@ public class BookingService  implements IBookingService{
     }
 
     private Booking requestToEntity(BookingRequest entity, Booking booking){
-        booking.setValor(entity.getValor());
-        booking.setEstado(entity.getEstado());
-        booking.setFecha_ingreso(entity.getFecha_ingreso());
-        booking.setFecha_salida(entity.getFecha_salida());
-        booking.setHora_entrada(entity.getHora_salida());
-        booking.getHora_salida(entity.getHora_salida());
+        booking.setPrice(entity.getPrice());
+        booking.setStatus(entity.getStatus());
+        booking.setAdmissionDate(entity.getAdmissionDate());
+        booking.setDepartureDate(entity.getDepartureDate());
+        booking.setAdmissionTime(entity.getAdmissionTime());
+        booking.setDepartureTime(entity.getDepartureTime());
 
         return booking;
     }

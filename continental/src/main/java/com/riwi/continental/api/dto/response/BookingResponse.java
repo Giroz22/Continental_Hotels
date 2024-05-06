@@ -1,5 +1,8 @@
 package com.riwi.continental.api.dto.response;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import com.riwi.continental.domain.entities.Booking;
 import com.riwi.continental.util.enums.StatusBooking;
 
@@ -12,12 +15,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingResponse<LocalDate> {
+public class BookingResponse {
     
-    private Double valor;
-    private StatusBooking estado;
-    private LocalDate fecha_ingreso;
-    private LocalDate fecha_salida;
-    private Booking booking;
+    private String id;
+    private Double price;
+    private StatusBooking status;
+    private LocalDate admissionDate;
+    private LocalDate departureDate;
+    private LocalTime admissionTime;
+    private LocalTime departureTime;
+    
     
 }

@@ -39,10 +39,17 @@ public class BookingController {
         return ResponseEntity.ok(this.bookingService.getAll(page-1, size));
     }
 
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<BookingResponse> get(
+        @PathVariable String id
+    ){
+        return ResponseEntity.ok(this.bookingService.findById(id));
+    }
+
     
     @PostMapping
     public ResponseEntity<BookingResponse> insert(
-        @Validated @RequestBody BookingRequest Booking)
+        @Validated @RequestBody BookingRequest booking)
         {
             this.bookingService.create(booking);
             return ResponseEntity.ok(this.bookingService.create(booking));
@@ -61,5 +68,7 @@ public class BookingController {
         this.bookingService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    
 
 }
