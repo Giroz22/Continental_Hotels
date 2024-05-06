@@ -13,6 +13,7 @@ import com.riwi.continental.domain.entities.Guest;
 import com.riwi.continental.domain.repositories.BookingRepository;
 import com.riwi.continental.domain.repositories.GuestRepository;
 import com.riwi.continental.infrastructure.abstract_services.IGuestService;
+import com.riwi.continental.util.enums.AgeCategory;
 
 import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import lombok.AllArgsConstructor;
@@ -42,10 +43,13 @@ public class GuestService  implements IGuestService{
   }
 
   @Override
-  public GuestResponse create(GuestRequest entity) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'create'");
-  }
+  public GuestResponse create(GuestRequest request) {
+    //Bookig booking = this.bookingRepository.findAllById(request.getBookingId()).orElseThrow(() -> new IdNotFoundException("Booking"));
+    Guest guest = this.requestToGuest(request, new Guest());
+    //guest.setBooking(booking);
+    
+    return this.entityToResponse(this.guestRepository.save(guest));
+    }
 
   @Override
   public GuestResponse update(GuestRequest entity) {
@@ -69,5 +73,15 @@ public class GuestService  implements IGuestService{
 
     //response.setBooking(bookingDTO);
     return response;
+  }
+
+  private Guest requestToGuest (GuestRequest request, Guest entity){
+    entity.setIdDocument(request.getIdDocument());
+    entity.setName(request.getName());
+    entity.setLastname(request.getLastname());
+    entity.setAge(request.getAge());
+    entity.setAgeCategory(AgeCategory.ADULT);
+
+    return entity;
   }
 }
