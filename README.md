@@ -65,3 +65,13 @@ El proyecto está dirigido a Continental Hotels y sus equipos administrativos y 
 
 ## TRELLO
 https://trello.com/b/EIHC6xAF/equipo-4
+
+---
+
+## Diagrama de la base de datos
+
+![DiagramaDB](https://github.com/Giroz22/Continental_Hotels/assets/147103562/5f3e73e8-6846-49c3-8bf9-6c2ba1b05393)
+
+## Diagrama de arquitectura
+
+![DiagramaArquitectura](https://github.com/Giroz22/Continental_Hotels/assets/147103562/59deb77b-a06e-4df1-b06f-a9ec8676dd4c)
