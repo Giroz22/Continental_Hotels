@@ -3,6 +3,8 @@ package com.riwi.continental.infrastructure.services;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.riwi.continental.api.dto.request.FloorRequest;
@@ -27,44 +29,58 @@ public class FloorService implements IFloorService {
 
     @Override
     public Page<FloorResponse> getAll(int page, int size) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAll'");
+        if (page < 0) {
+            page = 1;
+        }
+        Pageable pageable = PageRequest.of(page, size);
+
+        return this.floorRepository.findAll(pageable).map(floor -> this.floorToFloorResponse(floor));
     }
 
     @Override
     public FloorResponse findById(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        Floor floor = this.findFloorById(id);
+
+        return this.floorToFloorResponse(floor);
+    }
+
+    private Floor findFloorById(String id) {
+        return this.floorRepository.findById(id).orElseThrow();
     }
 
     @Override
-    public FloorResponse create(FloorRequest entity) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
+    public FloorResponse create(FloorRequest floorRequest) {
+        Floor floor = this.floorRequestToFloor(floorRequest, new Floor());
+
+        return this.floorToFloorResponse(this.floorRepository.save(floor));
     }
 
     @Override
-    public FloorResponse update(FloorRequest entity, String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    public FloorResponse update(FloorRequest floorRequest, String id) {
+        Floor floor = this.findFloorById(id);
+        floor = this.floorRequestToFloor(floorRequest, floor);
+
+        return this.floorToFloorResponse(this.floorRepository.save(floor));
     }
 
     @Override
     public void delete(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        Floor floor = this.findFloorById(id);
+
+        this.floorRepository.delete(floor);
     }
 
-    private FloorResponse floorToFloorResponse(Floor floor){
+    private FloorResponse floorToFloorResponse(Floor floor) {
         FloorResponse floorResponse = new FloorResponse();
 
-        //HotelToFloorResponse hotelToFloorResponse = new HotelToFloorResponse();
-        //BeanUtils.copyProperties(floor.getHotel(), hotelToFloorResponse);
+        // HotelToFloorResponse hotelToFloorResponse = new HotelToFloorResponse();
+        // BeanUtils.copyProperties(floor.getHotel(), hotelToFloorResponse);
         BeanUtils.copyProperties(floor, floorResponse);
 
         return floorResponse;
     }
-    private Floor floorRequestToFloor(FloorRequest floorRequest, Floor floor){
+
+    private Floor floorRequestToFloor(FloorRequest floorRequest, Floor floor) {
         BeanUtils.copyProperties(floorRequest, floor);
         floor.setStatusFloor(StatusFloor.AVAILABLE);
         return floor;
