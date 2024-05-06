@@ -3,6 +3,7 @@ package com.riwi.continental.api.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,4 +38,10 @@ public class GuestController {
       return ResponseEntity.ok(this.iGuestService.create(guest));
     }
 
+  @GetMapping(path = "/{id}")
+  public ResponseEntity<GuestResponse> get(
+    @PathVariable String id
+  ){
+    return ResponseEntity.ok(this.iGuestService.findById(id));
+  }
 }

@@ -38,8 +38,7 @@ public class GuestService  implements IGuestService{
 
   @Override
   public GuestResponse findById(String id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    return this.entityToResponse(this.find(id));
   }
 
   @Override
@@ -83,5 +82,10 @@ public class GuestService  implements IGuestService{
     entity.setAgeCategory(AgeCategory.ADULT);
 
     return entity;
+  }
+
+  private Guest find (String id){
+    return this.guestRepository.findById(id).orElseThrow();
+    //return this.guestRepository.findById(id).orElseThrow(() -> new IdNotFoundException("guest"));
   }
 }
