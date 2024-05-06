@@ -51,9 +51,16 @@ public class GuestService  implements IGuestService{
     }
 
   @Override
-  public GuestResponse update(GuestRequest entity) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'update'");
+  public GuestResponse update(GuestRequest request, String id) {
+    Guest guest = this.find(id);
+
+    //Booking booking = this.bookingRepository.findById(request.getBookingId()).orElseThrow(() -> new IdNotFoundException("booking"))
+  
+    guest = this.requestToGuest(request, guest);
+    //guest.setBooking(booking);
+    guest.setAgeCategory(request.getAgeCategory());
+
+    return this.entityToResponse(this.guestRepository.save(guest));
   }
 
   @Override
