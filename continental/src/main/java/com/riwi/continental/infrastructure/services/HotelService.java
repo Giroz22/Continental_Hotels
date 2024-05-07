@@ -18,6 +18,7 @@ import com.riwi.continental.domain.entities.Floor;
 import com.riwi.continental.domain.entities.Hotel;
 import com.riwi.continental.domain.repositories.HotelRepository;
 import com.riwi.continental.infrastructure.abstract_services.IHotelService;
+import com.riwi.continental.util.exceptions.IdNotFoundException;
 
 import lombok.AllArgsConstructor;
 
@@ -47,7 +48,7 @@ public class HotelService implements IHotelService {
     }
 
     private Hotel findHotelById(String id) {
-        return this.hotelRepository.findById(id).orElseThrow();
+        return this.hotelRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Hotel"));
     }
 
     @Override

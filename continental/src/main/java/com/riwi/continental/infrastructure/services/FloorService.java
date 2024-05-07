@@ -16,6 +16,7 @@ import com.riwi.continental.domain.repositories.FloorRepository;
 import com.riwi.continental.domain.repositories.HotelRepository;
 import com.riwi.continental.infrastructure.abstract_services.IFloorService;
 import com.riwi.continental.util.enums.StatusFloor;
+import com.riwi.continental.util.exceptions.IdNotFoundException;
 
 import lombok.AllArgsConstructor;
 
@@ -46,7 +47,7 @@ public class FloorService implements IFloorService {
     }
 
     private Floor findFloorById(String id) {
-        return this.floorRepository.findById(id).orElseThrow();
+        return this.floorRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Company"));
     }
 
     @Override

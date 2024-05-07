@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity(name = "hotels")
+@Entity(name = "hotel")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
