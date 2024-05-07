@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.riwi.continental.domain.entities.Booking;
 
 @Repository
-public interface BookingRepository  extends JpaRepository<Booking, String>{
-    
+public interface BookingRepository extends JpaRepository<Booking, String>{
 }
