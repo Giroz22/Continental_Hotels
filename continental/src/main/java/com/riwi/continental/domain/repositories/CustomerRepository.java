@@ -3,8 +3,9 @@ package com.riwi.continental.domain.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.riwi.continental.domain.entities.Booking;
+import com.riwi.continental.domain.entities.Customer;
 
 @Repository
-public interface BookingRepository extends JpaRepository<Booking, String>{
+public interface CustomerRepository extends JpaRepository <Customer, String>{
+
 }
