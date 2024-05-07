@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ContinentalApplication<continental>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.riwi.continental.ContinentalApplication",
+            "projectName": "continental",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

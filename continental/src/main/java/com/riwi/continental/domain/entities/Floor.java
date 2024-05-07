@@ -1,0 +1,46 @@
+package com.riwi.continental.domain.entities;
+
+import com.riwi.continental.util.enums.StatusFloor;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity(name = "floors")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Floor {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
+
+    @Column(length = 15, nullable = false)
+    private int number;
+
+    @Column(length = 25, nullable = false)
+    @Enumerated(EnumType.STRING)
+    private StatusFloor statusFloor;
+
+    @Column(length = 2, nullable = false)
+    private int numberOfRooms;
+
+    // @OneToMany(mappedBy = "floors", fetch = FetchType.EAGER, cascade =
+    // CascadeType.ALL, orphanRemoval = false)
+    // @ToString.Exclude
+    // @EqualsAndHashCode.Exclude
+    // private List<Room> rooms;
+
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "hotels_id", referencedColumnName = "id")
+    // private Hotel hotel;
+
+}
