@@ -1,5 +1,11 @@
 package com.riwi.continental.domain.repositories;
 
-public class BookingRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.riwi.continental.domain.entities.Booking;
+
+@Repository
+public interface BookingRepository  extends JpaRepository<Booking, String>{
     
 }
