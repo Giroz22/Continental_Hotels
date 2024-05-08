@@ -3,6 +3,7 @@ package com.riwi.continental.api.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +35,7 @@ public class FloorController {
     }
 
     @PostMapping(path = "/add")
-    public ResponseEntity<FloorResponse> addFloor(@RequestBody FloorRequest floorRequest) {
+    public ResponseEntity<FloorResponse> addFloor(@Validated @RequestBody FloorRequest floorRequest) {
 
         return ResponseEntity.ok(this.iFloorService.create(floorRequest));
     }
@@ -45,7 +46,8 @@ public class FloorController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<FloorResponse> updateFloor(@PathVariable String id, @RequestBody FloorRequest floorRequest) {
+    public ResponseEntity<FloorResponse> updateFloor(@PathVariable String id,
+            @Validated @RequestBody FloorRequest floorRequest) {
 
         return ResponseEntity.ok(this.iFloorService.update(floorRequest, id));
     }

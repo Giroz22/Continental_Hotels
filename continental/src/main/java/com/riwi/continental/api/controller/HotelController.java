@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
-@RequestMapping(path = "/Hotels")
+@RequestMapping(path = "/hotels")
 @AllArgsConstructor
 public class HotelController {
 
