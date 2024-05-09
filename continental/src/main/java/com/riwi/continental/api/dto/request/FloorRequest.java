@@ -19,7 +19,7 @@ public class FloorRequest {
   @Max(value = 30, message = "The last floor must be the 30")
   private int number;
 
-  @NotNull(message = "You have to specify the number of rooms the floor has")
+  @NotNull(message = "You have to specify the number of rooms the floor have")
   @Min(value = 5, message = "Min amount of rooms is 5 per floor")
   @Max(value = 20, message = "Max amount of rooms is 20 per floor")
   private int numberOfRooms;

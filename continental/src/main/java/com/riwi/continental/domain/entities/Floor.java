@@ -26,14 +26,14 @@ public class Floor {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(length = 15, nullable = false)
+    @Column(nullable = false)
     private int number;
 
     @Column(length = 25, nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusFloor statusFloor;
 
-    @Column(length = 2, nullable = false)
+    @Column(nullable = false)
     private int numberOfRooms;
 
     // @OneToMany(mappedBy = "floors", fetch = FetchType.EAGER, cascade =

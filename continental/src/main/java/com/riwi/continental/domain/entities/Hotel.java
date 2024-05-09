@@ -1,5 +1,6 @@
 package com.riwi.continental.domain.entities;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -35,17 +36,16 @@ public class Hotel {
     @Column(length = 50, nullable = false)
     private String contact;
 
-    @Column(length = 5, nullable = false)
+    @Column(nullable = false)
     private double calification;
 
-    @Column(length = 15, nullable = false)
-    private double earnings;
+    @Column(precision = 15, scale = 5, nullable = false)
+    private BigDecimal earnings;
 
-    @Column(length = 2, nullable = false)
+    @Column(nullable = false)
     private int numberOfFloors;
 
-    @OneToMany(mappedBy = "hotel", fetch = FetchType.EAGER, cascade =
-    CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "hotel", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<Floor> floors;
