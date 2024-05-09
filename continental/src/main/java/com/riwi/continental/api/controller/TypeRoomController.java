@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/rooms-type")
-public class TypeRoomControlle {
+public class TypeRoomController {
     @Autowired
     private final IRoomTypeService typeRoomService;
 
@@ -38,12 +38,12 @@ public class TypeRoomControlle {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<RoomTypeResponse> get(@RequestParam String id) {
+    public ResponseEntity<RoomTypeResponse> getById(@PathVariable String id) {
        return ResponseEntity.ok(this.typeRoomService.findById(id));
     }
 
 
-    @PostMapping("path")
+    @PostMapping
     public ResponseEntity<RoomTypeResponse> insert(@RequestBody RoomTypeRequest typeRoom) {
        return ResponseEntity.ok(this.typeRoomService.create(typeRoom));
     }
@@ -61,14 +61,4 @@ public class TypeRoomControlle {
         return ResponseEntity.ok(this.typeRoomService.update(typeRoom, id));
     }
     
-
-
-
-
-
-
-
-
-
-
 }

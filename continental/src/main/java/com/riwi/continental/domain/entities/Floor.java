@@ -2,18 +2,10 @@ package com.riwi.continental.domain.entities;
 
 import com.riwi.continental.util.enums.StatusFloor;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Entity(name = "floors")
+import jakarta.persistence.*;
+import lombok.*;
+import java.util.List;
+@Entity(name = "floor")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,11 +25,11 @@ public class Floor {
     @Column(length = 2, nullable = false)
     private int numberOfRooms;
 
-    // @OneToMany(mappedBy = "floors", fetch = FetchType.EAGER, cascade =
-    // CascadeType.ALL, orphanRemoval = false)
-    // @ToString.Exclude
-    // @EqualsAndHashCode.Exclude
-    // private List<Room> rooms;
+    @OneToMany(mappedBy = "floor", fetch = FetchType.EAGER, cascade =
+    CascadeType.ALL, orphanRemoval = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Room> rooms;
 
     // @ManyToOne(fetch = FetchType.LAZY)
     // @JoinColumn(name = "hotels_id", referencedColumnName = "id")

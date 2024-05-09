@@ -13,9 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoomResponse {
-    private String room_id;
+    private String id;
     private StateRoom state;
-    private int num;
+    private int roomNum;
     private double price;
-    private RoomTypeToRoomResponse roomType;
+    private int capicity;
+    private String description;
+    private RoomTypeToAnyResponse roomType;
+    private FloorToHotelResponse floor;
 }

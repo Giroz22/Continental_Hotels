@@ -1,5 +1,7 @@
 package com.riwi.continental.api.dto.response;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,10 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoomTypeToRoomResponse {
-    private String roomType_id;    
+public class RoomTypeToAnyResponse {
+    private String id;    
     private String name;
     private String description;
-    private double baseValue;
+    private BigDecimal baseValue;
     private int capicity;
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,7 +49,7 @@ public class RoomController {
     
 
     @PostMapping
-    public ResponseEntity<RoomResponse> insert(@RequestBody RoomRequest room) {
+    public ResponseEntity<RoomResponse> insert(@Validated @RequestBody RoomRequest room) {
         return ResponseEntity.ok(this.roomService.create(room));
     }
     
@@ -62,7 +63,7 @@ public class RoomController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RoomResponse> update(@PathVariable String id, @RequestBody RoomRequest room) {
+    public ResponseEntity<RoomResponse> update(@Validated @PathVariable String id, @RequestBody RoomRequest room) {
        return ResponseEntity.ok(this.roomService.update(room, id));
     }
 
