@@ -1,5 +1,8 @@
 package com.riwi.continental.infrastructure.services;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +18,7 @@ import com.riwi.continental.domain.entities.Floor;
 import com.riwi.continental.domain.entities.Hotel;
 import com.riwi.continental.domain.repositories.HotelRepository;
 import com.riwi.continental.infrastructure.abstract_services.IHotelService;
+import com.riwi.continental.util.exceptions.IdNotFoundException;
 
 import lombok.AllArgsConstructor;
 
@@ -44,7 +48,7 @@ public class HotelService implements IHotelService {
     }
 
     private Hotel findHotelById(String id) {
-        return this.hotelRepository.findById(id).orElseThrow();
+        return this.hotelRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Hotel"));
     }
 
     @Override
@@ -72,13 +76,14 @@ public class HotelService implements IHotelService {
     private HotelResponse hotelToHotelResponse(Hotel hotel) {
         HotelResponse hotelResponse = new HotelResponse();
         BeanUtils.copyProperties(hotel, hotelResponse);
-        // hotelResponse.getFloors().stream().map(floor ->
-        // this.floorToFloorToHotelResponse(floor).collect(Collectors.toList()));
+        hotelResponse.setFloors(
+                hotel.getFloors().stream().map(floor -> this.floorToFloorToHotelResponse(floor))
+                        .collect(Collectors.toList()));
         return hotelResponse;
     }
 
     private Hotel hotelRequestToHotel(HotelRequest hotelRequest, Hotel hotel) {
-        // hotel.setFloors(New ArrayList<>());
+        hotel.setFloors(new ArrayList<>());
         BeanUtils.copyProperties(hotelRequest, hotel);
         return hotel;
     }

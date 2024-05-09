@@ -11,10 +11,12 @@ import com.riwi.continental.api.dto.request.FloorRequest;
 import com.riwi.continental.api.dto.response.FloorResponse;
 import com.riwi.continental.api.dto.response.HotelToFloorResponse;
 import com.riwi.continental.domain.entities.Floor;
+import com.riwi.continental.domain.entities.Hotel;
 import com.riwi.continental.domain.repositories.FloorRepository;
 import com.riwi.continental.domain.repositories.HotelRepository;
 import com.riwi.continental.infrastructure.abstract_services.IFloorService;
 import com.riwi.continental.util.enums.StatusFloor;
+import com.riwi.continental.util.exceptions.IdNotFoundException;
 
 import lombok.AllArgsConstructor;
 
@@ -45,12 +47,14 @@ public class FloorService implements IFloorService {
     }
 
     private Floor findFloorById(String id) {
-        return this.floorRepository.findById(id).orElseThrow();
+        return this.floorRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Company"));
     }
 
     @Override
     public FloorResponse create(FloorRequest floorRequest) {
+        Hotel hotel = this.hotelRepository.findById(floorRequest.getHotelId()).orElseThrow();
         Floor floor = this.floorRequestToFloor(floorRequest, new Floor());
+        floor.setHotel(hotel);
 
         return this.floorToFloorResponse(this.floorRepository.save(floor));
     }
@@ -58,7 +62,10 @@ public class FloorService implements IFloorService {
     @Override
     public FloorResponse update(FloorRequest floorRequest, String id) {
         Floor floor = this.findFloorById(id);
+
         floor = this.floorRequestToFloor(floorRequest, floor);
+        Hotel hotel = this.hotelRepository.findById(floorRequest.getHotelId()).orElseThrow();
+        floor.setHotel(hotel);
 
         return this.floorToFloorResponse(this.floorRepository.save(floor));
     }
@@ -73,9 +80,11 @@ public class FloorService implements IFloorService {
     private FloorResponse floorToFloorResponse(Floor floor) {
         FloorResponse floorResponse = new FloorResponse();
 
-        // HotelToFloorResponse hotelToFloorResponse = new HotelToFloorResponse();
-        // BeanUtils.copyProperties(floor.getHotel(), hotelToFloorResponse);
+        HotelToFloorResponse hotelToFloorResponse = new HotelToFloorResponse();
+        BeanUtils.copyProperties(floor.getHotel(), hotelToFloorResponse);
         BeanUtils.copyProperties(floor, floorResponse);
+
+        floorResponse.setHotelToFloorResponse(hotelToFloorResponse);
 
         return floorResponse;
     }
