@@ -1,6 +1,8 @@
 package com.riwi.continental.domain.entities;
 
-import com.riwi.continental.util.enums.StatusFloor;
+import java.math.BigDecimal;
+
+import com.riwi.continental.util.enums.StateRoom;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,39 +13,47 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "floor")
+@Entity(name = "room")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Floor {
-
+public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false)
-    private int number;
-
-    @Column(length = 25, nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusFloor statusFloor;
+    private StateRoom state;
 
     @Column(nullable = false)
-    private int numberOfRooms;
+    @Min(value = 0)
+    private int roomNum;
 
-    @OneToMany(mappedBy = "floor", fetch = FetchType.EAGER, cascade =
-    CascadeType.ALL, orphanRemoval = false)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private List<Room> rooms;
+    @Column(nullable = false)
+    private BigDecimal price;
+
+    @Column(nullable = false)
+    private int capicity;
+
+    @Column(nullable = false)
+    @Lob
+    private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotels_id", referencedColumnName = "id")
-    private Hotel hotel;
+    @JoinColumn(name = "roomType_id", referencedColumnName = "id")
+    private RoomType roomType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "floor_id", referencedColumnName = "id")
+    private Floor floor;
 
 }
