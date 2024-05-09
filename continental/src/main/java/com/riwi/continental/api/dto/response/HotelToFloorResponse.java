@@ -14,6 +14,6 @@ public class HotelToFloorResponse {
     private String name;
     private String location;
     private String contact;
-    private double calification;
+    private double qualification;
     private int numberOfFloors;
 }

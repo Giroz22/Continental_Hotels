@@ -30,14 +30,14 @@ public class Hotel {
     @Column(length = 30, nullable = false)
     private String name;
 
-    @Column(length = 80, nullable = false)
+    @Column(length = 80, nullable = false, unique =  true)
     private String location;
 
     @Column(length = 50, nullable = false)
     private String contact;
 
     @Column(nullable = false)
-    private double calification;
+    private double qualification;
 
     @Column(precision = 15, scale = 5, nullable = false)
     private BigDecimal earnings;
