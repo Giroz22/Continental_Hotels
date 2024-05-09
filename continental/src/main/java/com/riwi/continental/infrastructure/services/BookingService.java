@@ -16,7 +16,6 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-
 public class BookingService  implements IBookingService{
 
     @Autowired

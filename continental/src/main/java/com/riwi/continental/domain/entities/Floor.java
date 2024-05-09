@@ -36,11 +36,11 @@ public class Floor {
     @Column(length = 2, nullable = false)
     private int numberOfRooms;
 
-    // @OneToMany(mappedBy = "floors", fetch = FetchType.EAGER, cascade =
-    // CascadeType.ALL, orphanRemoval = false)
-    // @ToString.Exclude
-    // @EqualsAndHashCode.Exclude
-    // private List<Room> rooms;
+    @OneToMany(mappedBy = "floor", fetch = FetchType.EAGER, cascade =
+    CascadeType.ALL, orphanRemoval = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Room> rooms;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotels_id", referencedColumnName = "id")
