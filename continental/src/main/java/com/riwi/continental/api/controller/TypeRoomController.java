@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +45,7 @@ public class TypeRoomController {
 
 
     @PostMapping
-    public ResponseEntity<RoomTypeResponse> insert(@RequestBody RoomTypeRequest typeRoom) {
+    public ResponseEntity<RoomTypeResponse> insert(@Validated @RequestBody RoomTypeRequest typeRoom) {
        return ResponseEntity.ok(this.typeRoomService.create(typeRoom));
     }
 
@@ -57,7 +58,7 @@ public class TypeRoomController {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<RoomTypeResponse> update(@PathVariable String id, @RequestBody RoomTypeRequest typeRoom) {
+    public ResponseEntity<RoomTypeResponse> update(@Validated @PathVariable String id, @RequestBody RoomTypeRequest typeRoom) {
         return ResponseEntity.ok(this.typeRoomService.update(typeRoom, id));
     }
     

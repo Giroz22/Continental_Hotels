@@ -51,8 +51,11 @@ public class RoomService implements IRoomService{
        Floor floor = this.floorRepository.findById(entity.getFloorId()).orElseThrow();
 
         Room room = this.requestToRoom(entity, new Room());
+        
+
         room.setRoomType(typeRoom);
         room.setFloor(floor);
+
 
         return this.entityToResponse(this.roomRepository.save(room));
     }
@@ -60,15 +63,14 @@ public class RoomService implements IRoomService{
     @Override
     public RoomResponse update(RoomRequest request, String id) {
         Room room = this.find(id);
-
         RoomType typeRoom = this.typeRoomRepository.findById(request.getRoomTypeId()).orElseThrow();
        Floor floor = this.floorRepository.findById(request.getFloorId()).orElseThrow();
 
-
-        room = this.requestToRoom(request, room);
-        room.setRoomType(typeRoom);
+room.setRoomType(typeRoom);
         room.setFloor(floor);
         room.setState(request.getState());
+        room = this.requestToRoom(request, room);
+        
 
         return this.entityToResponse(this.roomRepository.save(room));
     }
@@ -99,7 +101,7 @@ public class RoomService implements IRoomService{
 
     private Room requestToRoom(RoomRequest request, Room entity){
         BeanUtils.copyProperties(request, entity);
-        entity.setState(StateRoom.AVAILABLE);
+       
         return entity;
     }
 
