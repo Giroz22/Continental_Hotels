@@ -31,6 +31,7 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private StateRoom state;
 

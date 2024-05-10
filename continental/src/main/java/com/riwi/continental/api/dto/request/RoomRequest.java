@@ -25,12 +25,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoomRequest {
-    // @NotBlank(message = "The state of the room is required")
+    @NotNull(message = "The state of the room is required")
     @Enumerated(EnumType.STRING)
     private StateRoom state;
 
     @NotNull( message = "The room number is requaried")
     @PositiveOrZero(message = "The room number must be positive or greater then zero")
+    @Min(value = 1, message = "The room number must be greater than 0")
     private int roomNum;
 
     @NotNull(message = "The room price is requaried")

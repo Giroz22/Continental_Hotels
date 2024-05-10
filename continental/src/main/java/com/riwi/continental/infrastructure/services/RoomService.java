@@ -18,6 +18,7 @@ import com.riwi.continental.domain.repositories.RoomRepository;
 import com.riwi.continental.domain.repositories.RoomTypeRepository;
 import com.riwi.continental.infrastructure.abstract_services.IRoomService;
 import com.riwi.continental.util.enums.StateRoom;
+import com.riwi.continental.util.exceptions.IdNotFoundException;
 
 import lombok.AllArgsConstructor;
 
@@ -47,8 +48,8 @@ public class RoomService implements IRoomService{
 
     @Override
     public RoomResponse create(RoomRequest entity) {
-       RoomType typeRoom = this.typeRoomRepository.findById(entity.getRoomTypeId()).orElseThrow();
-       Floor floor = this.floorRepository.findById(entity.getFloorId()).orElseThrow();
+       RoomType typeRoom = this.typeRoomRepository.findById(entity.getRoomTypeId()).orElseThrow(() -> new IdNotFoundException("room"));
+       Floor floor = this.floorRepository.findById(entity.getFloorId()).orElseThrow(() -> new IdNotFoundException("room"));
 
         Room room = this.requestToRoom(entity, new Room());
         
@@ -63,10 +64,11 @@ public class RoomService implements IRoomService{
     @Override
     public RoomResponse update(RoomRequest request, String id) {
         Room room = this.find(id);
-        RoomType typeRoom = this.typeRoomRepository.findById(request.getRoomTypeId()).orElseThrow();
-       Floor floor = this.floorRepository.findById(request.getFloorId()).orElseThrow();
+        RoomType typeRoom = this.typeRoomRepository.findById(request.getRoomTypeId()).orElseThrow(() -> new IdNotFoundException("room"));
 
-room.setRoomType(typeRoom);
+       Floor floor = this.floorRepository.findById(request.getFloorId()).orElseThrow(() -> new IdNotFoundException("room"));
+
+        room.setRoomType(typeRoom);
         room.setFloor(floor);
         room.setState(request.getState());
         room = this.requestToRoom(request, room);
@@ -104,9 +106,9 @@ room.setRoomType(typeRoom);
        
         return entity;
     }
-
+ 
     private Room find(String id){
-        return this.roomRepository.findById(id).orElseThrow();
+        return this.roomRepository.findById(id).orElseThrow(() -> new IdNotFoundException("room"));
     }
 
 
