@@ -1,6 +1,7 @@
 package com.riwi.continental.infrastructure.services;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +10,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.riwi.continental.api.dto.request.CustomerRequest;
+import com.riwi.continental.api.dto.response.BookingToCustomerResponse;
 import com.riwi.continental.api.dto.response.CustomerResponse;
 import com.riwi.continental.domain.entities.Booking;
 import com.riwi.continental.domain.entities.Customer;
 import com.riwi.continental.domain.repositories.CustomerRepository;
 import com.riwi.continental.infrastructure.abstract_services.ICustomerService;
+import com.riwi.continental.util.exceptions.IdNotFoundException;
 
 import lombok.AllArgsConstructor;
 
@@ -60,17 +63,17 @@ public class CustomerService implements ICustomerService{
   private CustomerResponse entityToResponse(Customer entity){
     CustomerResponse response = new CustomerResponse();
     BeanUtils.copyProperties(entity, response);
-    //response.setBookings(entity.getBookings().stream().map(booking -> this.bookingToResponse(booking)).collect(collectors.toList()));
+    response.setBooking(entity.getBooking().stream().map(booking -> this.bookingToResponse(booking)).collect(Collectors.toList()));
     return response;
   }
 
-  // private BookingToCustomerResponse bookingToResponse (Booking entity) {
-  //   BookingToCustomerResponse response = new BookingToCustomerResponse ();
+  private BookingToCustomerResponse bookingToResponse (Booking entity) {
+    BookingToCustomerResponse response = new BookingToCustomerResponse ();
 
-  //   BeanUtils.copyProperties(entity, response);
+    BeanUtils.copyProperties(entity, response);
 
-  //   return response;
-  // }
+    return response;
+  }
 
   //debe sarlir una lista en booking todas las reservas que tiene el cliente
 
@@ -80,13 +83,13 @@ public class CustomerService implements ICustomerService{
     customer.setAge(entity.getAge());
     customer.setIdDocument(entity.getIdDocument());
     customer.setCellphone(entity.getCellphone());
-    //customer.setBookings(new ArrayList<>());
+    customer.setBooking(new ArrayList<>());
 
     return customer;
   }
 
   private Customer find(String id){
-    return this.customerRepository.findById(id).orElseThrow();
+    return this.customerRepository.findById(id).orElseThrow(()-> new IdNotFoundException("Customer"));
   }
 
 }
