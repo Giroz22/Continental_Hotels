@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.riwi.continental.api.dto.request.FloorRequest;
 import com.riwi.continental.api.dto.request.HotelRequest;
 import com.riwi.continental.api.dto.response.FloorToHotelResponse;
 import com.riwi.continental.api.dto.response.HotelResponse;

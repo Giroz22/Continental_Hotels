@@ -2,8 +2,6 @@ package com.riwi.continental.api.dto.response;
 
 import java.util.List;
 
-import com.riwi.continental.domain.entities.Booking;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +18,5 @@ public class CustomerResponse {
   private int age;
   private String idDocument;
   private String cellphone;
-  //private List<BookingToCustomerResponse> booking;
+  private List<BookingToCustomerResponse> booking;
 }

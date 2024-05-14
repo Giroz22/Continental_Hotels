@@ -9,13 +9,14 @@ import org.springframework.stereotype.Service;
 import com.riwi.continental.api.dto.request.GuestRequest;
 import com.riwi.continental.api.dto.response.BookingToGuestAndCustomerResponse;
 import com.riwi.continental.api.dto.response.GuestResponse;
+import com.riwi.continental.domain.entities.Booking;
 import com.riwi.continental.domain.entities.Guest;
 import com.riwi.continental.domain.repositories.BookingRepository;
 import com.riwi.continental.domain.repositories.GuestRepository;
 import com.riwi.continental.infrastructure.abstract_services.IGuestService;
 import com.riwi.continental.util.enums.AgeCategory;
+import com.riwi.continental.util.exceptions.IdNotFoundException;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -25,8 +26,8 @@ public class GuestService  implements IGuestService{
   @Autowired
   private final GuestRepository guestRepository;
 
-  //@Autowired
-  //private final BookingRepository bookingRepository;
+  @Autowired
+  private final BookingRepository bookingRepository;
 
   @Override
   public Page<GuestResponse> getAll(int page, int size) {
@@ -43,9 +44,9 @@ public class GuestService  implements IGuestService{
 
   @Override
   public GuestResponse create(GuestRequest request) {
-    //Bookig booking = this.bookingRepository.findAllById(request.getBookingId()).orElseThrow(() -> new IdNotFoundException("Booking"));
+    Booking booking = this.bookingRepository.findById(request.getBookingId()).orElseThrow(() -> new IdNotFoundException("Booking"));
     Guest guest = this.requestToGuest(request, new Guest());
-    //guest.setBooking(booking);
+    guest.setBooking(booking);
     
     return this.entityToResponse(this.guestRepository.save(guest));
     }
@@ -54,10 +55,10 @@ public class GuestService  implements IGuestService{
   public GuestResponse update(GuestRequest request, String id) {
     Guest guest = this.find(id);
 
-    //Booking booking = this.bookingRepository.findById(request.getBookingId()).orElseThrow(() -> new IdNotFoundException("booking"))
+    Booking booking = this.bookingRepository.findById(request.getBookingId()).orElseThrow(() -> new IdNotFoundException("Booking"));
   
     guest = this.requestToGuest(request, guest);
-    //guest.setBooking(booking);
+    guest.setBooking(booking);
     guest.setAgeCategory(request.getAgeCategory());
 
     return this.entityToResponse(this.guestRepository.save(guest));
@@ -73,11 +74,11 @@ public class GuestService  implements IGuestService{
     GuestResponse response = new GuestResponse();
     BeanUtils.copyProperties(entity, response);
 
-    //BookingToGuestResponse bookingDTO = new BookingToGuestResponse();
+    BookingToGuestResponse bookingDTO = new BookingToGuestResponse();
 
-    //BeanUtils.copyProperties(entity.getBookings, bookingDTO);
+    BeanUtils.copyProperties(entity.getBooking(), bookingDTO);
 
-    //response.setBooking(bookingDTO);
+    response.setBooking(bookingDTO);
     return response;
   }
 
@@ -92,7 +93,6 @@ public class GuestService  implements IGuestService{
   }
 
   private Guest find (String id){
-    return this.guestRepository.findById(id).orElseThrow();
-    //return this.guestRepository.findById(id).orElseThrow(() -> new IdNotFoundException("guest"));
+  return this.guestRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Guest"));
   }
 }

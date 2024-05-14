@@ -1,7 +1,6 @@
 package com.riwi.continental.api.dto.response;
 
-//import java.util.List;
-
+import java.util.List;
 import com.riwi.continental.util.enums.StatusFloor;
 
 import lombok.AllArgsConstructor;
@@ -18,6 +17,6 @@ public class FloorResponse {
   private int number;
   private int numberOfRooms;
   private StatusFloor statusFloor;
-  // private List<Room> rooms;
+  private List<RoomToAny> rooms;
   private HotelToFloorResponse hotelToFloorResponse;
 }

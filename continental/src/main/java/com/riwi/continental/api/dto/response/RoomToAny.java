@@ -19,6 +19,6 @@ public class RoomToAny {
     private StateRoom state;
     private int roomNum;
     private BigDecimal price;
-    private int capicity;
+    private int capacity;
     private String description;
 }

@@ -1,5 +1,7 @@
 package com.riwi.continental.api.dto.response;
 
+import com.riwi.continental.util.enums.StatusFloor;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,11 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HotelToFloorResponse {
-    private String id;
-    private String name;
-    private String location;
-    private String contact;
-    private double qualification;
-    private int numberOfFloors;
+public class FloorToAny {
+  private String id;
+  private int number;
+  private int numberOfRooms;
+  private StatusFloor statusFloor;
 }
