@@ -10,11 +10,9 @@ import com.riwi.continental.api.dto.request.BookingRequest;
 import com.riwi.continental.api.dto.response.BookingResponse;
 import com.riwi.continental.api.dto.response.CustomerToBookingResponse;
 import com.riwi.continental.api.dto.response.GuestToBookingResponse;
-import com.riwi.continental.api.dto.response.RoomToAny;
 import com.riwi.continental.domain.entities.Booking;
 import com.riwi.continental.domain.entities.Customer;
 import com.riwi.continental.domain.entities.Guest;
-import com.riwi.continental.domain.entities.Room;
 import com.riwi.continental.domain.repositories.BookingRepository;
 import com.riwi.continental.domain.repositories.CustomerRepository;
 import com.riwi.continental.infrastructure.abstract_services.IBookingService;
@@ -61,9 +59,7 @@ public class BookingService  implements IBookingService{
         Booking  bookingToUpdate = this.find(id);
         Booking booking = this.requestToEntity(entity, bookingToUpdate);
 
-        return this.entityToResponse(this.bookingRepository.save(booking));
-        
-        
+        return this.entityToResponse(this.bookingRepository.save(booking)); 
     }
 
     @Override
@@ -98,15 +94,6 @@ public class BookingService  implements IBookingService{
         return response;
     }
 
-    private RoomToAny roomToAny (Room entity){
-        RoomToAny response = new RoomToAny();
-
-        BeanUtils.copyProperties(entity, response);
-        return response;
-    }
-
-
-
     private Booking requestToEntity(BookingRequest entity, Booking booking){
         booking.setAdmissionDate(entity.getAdmissionDate());
         booking.setDepartureDate(entity.getDepartureDate());
@@ -114,8 +101,6 @@ public class BookingService  implements IBookingService{
         booking.setDepartureTime(entity.getDepartureTime());
         booking.setCustomer(this.customerRepository.findById(entity.getCustomer_id()).orElse(null));
         
-
-
         return booking;
     }
 

@@ -21,28 +21,26 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Guest {
-@Id
-@GeneratedValue(strategy = GenerationType.UUID)
-private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
-@Column(length = 15, nullable = false)
-private String idDocument;
+    @Column(length = 15, nullable = false)
+    private String idDocument;
 
-@Column(length = 45, nullable = false)
-private String name;
+    @Column(length = 45, nullable = false)
+    private String name;
 
-@Column(length = 45, nullable = false)
-private String lastname;
+    @Column(length = 45, nullable = false)
+    private String lastname;
 
-@Column(nullable = false)
-private int age;
+    @Column(nullable = false)
+    private int age;
 
-@Enumerated(EnumType.STRING)
-private AgeCategory ageCategory;
+    @Enumerated(EnumType.STRING)
+    private AgeCategory ageCategory;
 
-
-@ManyToOne(fetch = FetchType.LAZY)
-@JoinColumn(name = "booking_id" , referencedColumnName = "id")
-private Booking booking;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booking_id" , referencedColumnName = "id")
+    private Booking booking;
 }

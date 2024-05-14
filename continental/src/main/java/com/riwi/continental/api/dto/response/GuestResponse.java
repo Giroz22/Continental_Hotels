@@ -1,6 +1,5 @@
 package com.riwi.continental.api.dto.response;
 
-import com.riwi.continental.domain.entities.Booking;
 import com.riwi.continental.util.enums.AgeCategory;
 
 import lombok.AllArgsConstructor;
@@ -19,5 +18,5 @@ public class GuestResponse {
   private String lastname;
   private int age;
   private AgeCategory ageCategory;
-  // private BookingToGuestResponse booking;
+  private BookingToGuestResponse booking;
 }

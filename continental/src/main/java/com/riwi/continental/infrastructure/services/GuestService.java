@@ -7,7 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.riwi.continental.api.dto.request.GuestRequest;
-import com.riwi.continental.api.dto.response.BookingToGuestAndCustomerResponse;
+import com.riwi.continental.api.dto.response.BookingToGuestResponse;
 import com.riwi.continental.api.dto.response.GuestResponse;
 import com.riwi.continental.domain.entities.Booking;
 import com.riwi.continental.domain.entities.Guest;
