@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.riwi.continental.api.dto.request.BookingRequest;
 import com.riwi.continental.api.dto.response.BookingResponse;
-import com.riwi.continental.infrastructure.services.IBookingService;
+import com.riwi.continental.infrastructure.abstract_services.IBookingService;
 
 import lombok.AllArgsConstructor;
 
