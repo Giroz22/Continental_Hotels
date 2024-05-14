@@ -16,6 +16,7 @@ import com.riwi.continental.domain.entities.Customer;
 import com.riwi.continental.domain.entities.Guest;
 import com.riwi.continental.domain.entities.Room;
 import com.riwi.continental.domain.repositories.BookingRepository;
+import com.riwi.continental.infrastructure.abstract_services.IBookingService;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
 
 import lombok.AllArgsConstructor;
