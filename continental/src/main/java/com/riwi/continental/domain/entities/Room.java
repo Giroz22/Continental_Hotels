@@ -34,7 +34,7 @@ public class Room {
     @Enumerated(EnumType.STRING)
     private StateRoom state;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @Min(value = 0)
     private int roomNum;
 
@@ -42,7 +42,7 @@ public class Room {
     private BigDecimal price;
 
     @Column(nullable = false)
-    private int capicity;
+    private int capacity;
 
     @Column(nullable = false)
     @Lob

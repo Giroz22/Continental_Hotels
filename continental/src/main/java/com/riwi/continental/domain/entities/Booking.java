@@ -3,7 +3,6 @@ package com.riwi.continental.domain.entities;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import org.hibernate.mapping.List;
 
 import com.riwi.continental.util.enums.StatusBooking;
 

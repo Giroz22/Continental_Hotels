@@ -7,7 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.riwi.continental.api.dto.request.RoomRequest;
-import com.riwi.continental.api.dto.response.FloorToHotelResponse;
+import com.riwi.continental.api.dto.response.FloorToAny;
 import com.riwi.continental.api.dto.response.RoomResponse;
 import com.riwi.continental.api.dto.response.RoomTypeToAnyResponse;
 import com.riwi.continental.domain.entities.Floor;
@@ -17,13 +17,11 @@ import com.riwi.continental.domain.repositories.FloorRepository;
 import com.riwi.continental.domain.repositories.RoomRepository;
 import com.riwi.continental.domain.repositories.RoomTypeRepository;
 import com.riwi.continental.infrastructure.abstract_services.IRoomService;
-import com.riwi.continental.util.enums.StateRoom;
-
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class RoomService implements IRoomService{
+public class RoomService implements IRoomService {
     @Autowired
     private final RoomRepository roomRepository;
 
@@ -64,9 +62,9 @@ public class RoomService implements IRoomService{
     public RoomResponse update(RoomRequest request, String id) {
         Room room = this.find(id);
         RoomType typeRoom = this.typeRoomRepository.findById(request.getRoomTypeId()).orElseThrow();
-       Floor floor = this.floorRepository.findById(request.getFloorId()).orElseThrow();
+        Floor floor = this.floorRepository.findById(request.getFloorId()).orElseThrow();
 
-room.setRoomType(typeRoom);
+        room.setRoomType(typeRoom);
         room.setFloor(floor);
         room.setState(request.getState());
         room = this.requestToRoom(request, room);
@@ -85,7 +83,7 @@ room.setRoomType(typeRoom);
     private RoomResponse entityToResponse(Room entity){
         RoomResponse roomResponse = new RoomResponse();
         RoomTypeToAnyResponse typeRoomDto = new RoomTypeToAnyResponse();
-        FloorToHotelResponse floorDto = new FloorToHotelResponse();
+        FloorToAny floorDto = new FloorToAny();
 
         
         BeanUtils.copyProperties(entity, roomResponse);
