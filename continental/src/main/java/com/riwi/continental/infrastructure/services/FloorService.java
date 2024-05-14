@@ -47,12 +47,13 @@ public class FloorService implements IFloorService {
     }
 
     private Floor findFloorById(String id) {
-        return this.floorRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Company"));
+        return this.floorRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Floor"));
     }
 
     @Override
     public FloorResponse create(FloorRequest floorRequest) {
-        Hotel hotel = this.hotelRepository.findById(floorRequest.getHotelId()).orElseThrow();
+        Hotel hotel = this.hotelRepository.findById(floorRequest.getHotelId())
+                .orElseThrow(() -> new IdNotFoundException("Hotel"));
         Floor floor = this.floorRequestToFloor(floorRequest, new Floor());
         floor.setHotel(hotel);
 
@@ -64,7 +65,8 @@ public class FloorService implements IFloorService {
         Floor floor = this.findFloorById(id);
 
         floor = this.floorRequestToFloor(floorRequest, floor);
-        Hotel hotel = this.hotelRepository.findById(floorRequest.getHotelId()).orElseThrow();
+        Hotel hotel = this.hotelRepository.findById(floorRequest.getHotelId())
+                .orElseThrow(() -> new IdNotFoundException("Hotel"));
         floor.setHotel(hotel);
 
         return this.floorToFloorResponse(this.floorRepository.save(floor));

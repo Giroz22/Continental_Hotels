@@ -17,7 +17,6 @@ import com.riwi.continental.infrastructure.abstract_services.IGuestService;
 import com.riwi.continental.util.enums.AgeCategory;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import lombok.AllArgsConstructor;
 
 @Service

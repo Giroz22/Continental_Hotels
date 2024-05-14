@@ -10,6 +10,7 @@ import com.riwi.continental.api.dto.request.BookingRequest;
 import com.riwi.continental.api.dto.response.BookingResponse;
 import com.riwi.continental.domain.entities.Booking;
 import com.riwi.continental.domain.repositories.BookingRepository;
+import com.riwi.continental.infrastructure.abstract_services.IBookingService;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
 
 import lombok.AllArgsConstructor;

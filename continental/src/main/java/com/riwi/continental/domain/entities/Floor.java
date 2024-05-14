@@ -1,7 +1,10 @@
 package com.riwi.continental.domain.entities;
 
+import java.util.List;
+
 import com.riwi.continental.util.enums.StatusFloor;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,9 +15,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity(name = "floor")
 @Data
@@ -26,14 +32,14 @@ public class Floor {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(length = 15, nullable = false)
+    @Column(nullable = false, unique = true)
     private int number;
 
     @Column(length = 25, nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusFloor statusFloor;
 
-    @Column(length = 2, nullable = false)
+    @Column(nullable = false)
     private int numberOfRooms;
 
     @OneToMany(mappedBy = "floor", fetch = FetchType.EAGER, cascade =
