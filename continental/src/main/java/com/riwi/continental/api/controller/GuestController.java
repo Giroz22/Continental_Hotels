@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +40,7 @@ public class GuestController {
 
   @PostMapping
   public ResponseEntity<GuestResponse> insert (
-    @RequestBody GuestRequest guest){
+    @Validated @RequestBody GuestRequest guest){
       return ResponseEntity.ok(this.iGuestService.create(guest));
     }
 
@@ -64,7 +65,7 @@ public class GuestController {
 
   @PutMapping(path = "/{id}")
   public ResponseEntity<GuestResponse> update(
-    @PathVariable String id,
+    @Validated @PathVariable String id,
     @RequestBody GuestRequest guest){
       return ResponseEntity.ok(iGuestService.update(guest, id));
     }
