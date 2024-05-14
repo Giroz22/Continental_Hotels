@@ -19,8 +19,7 @@ import lombok.NoArgsConstructor;
 public class BookingRequest {
 
 
-    @NotNull(message = "The price date is required")
-    private Double price;
+   
 
     @NotNull(message = "The admision date is required")
     private LocalDate admissionDate;
@@ -34,13 +33,10 @@ public class BookingRequest {
     @NotNull(message = "The admission time is required")
     private LocalTime admissionTime;
 
-    @NotNull(message = "The status is required")
-    private StatusBooking status;
 
     @NotNull(message = "The customer id is required")
     private String customer_id;
 
-    @NotNull(message = "The room id is required")
-    private String room_id;
+    
     
 }

@@ -16,6 +16,7 @@ import com.riwi.continental.domain.entities.Customer;
 import com.riwi.continental.domain.entities.Guest;
 import com.riwi.continental.domain.entities.Room;
 import com.riwi.continental.domain.repositories.BookingRepository;
+import com.riwi.continental.domain.repositories.CustomerRepository;
 import com.riwi.continental.infrastructure.abstract_services.IBookingService;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
 
@@ -27,6 +28,8 @@ public class BookingService  implements IBookingService{
 
     @Autowired
     private final BookingRepository bookingRepository ;
+
+    private final CustomerRepository customerRepository;
 
     @Override
     
@@ -105,12 +108,13 @@ public class BookingService  implements IBookingService{
 
 
     private Booking requestToEntity(BookingRequest entity, Booking booking){
-        booking.setPrice(entity.getPrice());
-        booking.setStatus(entity.getStatus());
         booking.setAdmissionDate(entity.getAdmissionDate());
         booking.setDepartureDate(entity.getDepartureDate());
         booking.setAdmissionTime(entity.getAdmissionTime());
         booking.setDepartureTime(entity.getDepartureTime());
+        booking.setCustomer(this.customerRepository.findById(entity.getCustomer_id()).orElse(null));
+        
+
 
         return booking;
     }

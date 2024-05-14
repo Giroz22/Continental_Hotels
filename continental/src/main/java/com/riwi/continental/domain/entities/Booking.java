@@ -4,8 +4,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
 
-import org.hibernate.mapping.List;
+
+
+
 
 import com.riwi.continental.util.enums.StatusBooking;
 
@@ -33,20 +36,20 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private Double price;
-    private StatusBooking status;
     private LocalDate admissionDate;
     private LocalDate departureDate;
     private LocalTime admissionTime;
     private LocalTime departureTime;
+    
 
-    // @OneToMany
-    // @JoinColumn(mappeBy = "booking", fetch = FetchType.EAGER)
-    // private List<Guets>;
+    @ManyToOne
+    @JoinColumn(name = "id_customer", referencedColumnName = "id")
+    private  Customer customer;
 
-    // @ManyToOne
-    // @JoinColumn(name = "id_customer", referencedColumnName = "id")
-    // private List<Customer>;
+    @OneToMany(mappedBy = "booking", fetch = FetchType.EAGER)
+    private List<Guest> guests;
+
+    
 
     
 

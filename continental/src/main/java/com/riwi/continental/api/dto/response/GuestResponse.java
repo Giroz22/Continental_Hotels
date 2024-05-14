@@ -19,5 +19,5 @@ public class GuestResponse {
   private String lastname;
   private int age;
   private AgeCategory ageCategory;
-  private BookingToGuestAndCustomerResponse booking;
+  // private BookingToGuestResponse booking;
 }
