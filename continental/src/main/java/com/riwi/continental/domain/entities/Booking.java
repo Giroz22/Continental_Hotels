@@ -2,6 +2,8 @@ package com.riwi.continental.domain.entities;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hibernate.mapping.List;
 
@@ -13,6 +15,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -43,6 +47,8 @@ public class Booking {
     // @ManyToOne
     // @JoinColumn(name = "id_customer", referencedColumnName = "id")
     // private List<Customer>;
+
+    
 
     
 }

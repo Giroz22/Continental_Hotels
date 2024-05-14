@@ -8,7 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.riwi.continental.api.dto.request.BookingRequest;
 import com.riwi.continental.api.dto.response.BookingResponse;
+import com.riwi.continental.api.dto.response.CustomerToBookingResponse;
+import com.riwi.continental.api.dto.response.GuestToBookingResponse;
+import com.riwi.continental.api.dto.response.RoomToAny;
 import com.riwi.continental.domain.entities.Booking;
+import com.riwi.continental.domain.entities.Customer;
+import com.riwi.continental.domain.entities.Guest;
+import com.riwi.continental.domain.entities.Room;
 import com.riwi.continental.domain.repositories.BookingRepository;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
 
@@ -72,6 +78,30 @@ public class BookingService  implements IBookingService{
 
         return response;
     }
+
+    private GuestToBookingResponse guestToResponse(Guest entity){
+        GuestToBookingResponse response = new GuestToBookingResponse();
+
+        BeanUtils.copyProperties(entity, response);
+
+        return response;
+    }
+
+    private CustomerToBookingResponse costumerToResponse(Customer entity){
+        CustomerToBookingResponse response = new CustomerToBookingResponse();
+
+        BeanUtils.copyProperties(entity, response);
+        return response;
+    }
+
+    private RoomToAny roomToAny (Room entity){
+        RoomToAny response = new RoomToAny();
+
+        BeanUtils.copyProperties(entity, response);
+        return response;
+    }
+
+
 
     private Booking requestToEntity(BookingRequest entity, Booking booking){
         booking.setPrice(entity.getPrice());
