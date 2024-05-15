@@ -1,8 +1,11 @@
 package com.riwi.continental.domain.entities;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+
+import com.riwi.continental.util.enums.StatusBooking;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -33,6 +36,8 @@ public class Booking {
     private LocalDate departureDate;
     private LocalTime admissionTime;
     private LocalTime departureTime;
+    private BigDecimal price;
+    private StatusBooking status;
     
     @ManyToOne
     @JoinColumn(name = "id_customer", referencedColumnName = "id")
@@ -46,5 +51,15 @@ public class Booking {
         cascade = CascadeType.ALL,
         orphanRemoval = false
     )
-    private List<Guest> guests;    
+    private List<Guest> guests; 
+    
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(
+        mappedBy = "booking",
+        fetch = FetchType.EAGER,
+        cascade = CascadeType.ALL,
+        orphanRemoval = false
+    )
+    private List<Room> rooms; 
 }

@@ -56,4 +56,8 @@ public class Room {
     @JoinColumn(name = "floor_id", referencedColumnName = "id")
     private Floor floor;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booking_id", referencedColumnName = "id")
+    private Booking booking;
+
 }
