@@ -1,5 +1,7 @@
 package com.riwi.continental.api.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.riwi.continental.api.dto.request.BookingRequest;
 import com.riwi.continental.api.dto.response.BookingResponse;
+import com.riwi.continental.domain.entities.Booking;
 import com.riwi.continental.infrastructure.abstract_services.IBookingService;
 
 import lombok.AllArgsConstructor;
@@ -67,6 +70,11 @@ public class BookingController {
     public ResponseEntity<Void> delete(@PathVariable String id){
         this.bookingService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/customer/{id}")
+    public ResponseEntity<List<Booking>> getOutsideOrders(@PathVariable String id) {
+        return ResponseEntity.ok(this.bookingService.getCustomerBooking(id));
     }
 
     

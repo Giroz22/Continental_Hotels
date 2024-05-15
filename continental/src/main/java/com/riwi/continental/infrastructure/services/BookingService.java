@@ -1,5 +1,7 @@
 package com.riwi.continental.infrastructure.services;
 
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -108,4 +110,8 @@ public class BookingService  implements IBookingService{
         return this.bookingRepository.findById(id).orElseThrow(()-> new IdNotFoundException("Booking"));
     }
     
+    public List<Booking> getCustomerBooking(String idCustomer) {
+        return this.bookingRepository.findCustomerBooking(idCustomer);
+    }
+
 }
