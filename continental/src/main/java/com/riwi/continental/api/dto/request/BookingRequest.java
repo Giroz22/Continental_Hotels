@@ -17,11 +17,11 @@ import lombok.NoArgsConstructor;
 public class BookingRequest {
 
     @NotNull(message = "The admision date is required")
-    @FutureOrPresent(message = "The admision date  can't be in the past")
+    @FutureOrPresent(message = "The admision date can't be in the past")
     private LocalDate admissionDate;
 
     @NotNull(message = "The departure date is required")
-    @FutureOrPresent(message = "The admision date  can't be in the past")
+    @FutureOrPresent(message = "The departure date can't be in the past")
     private LocalDate departureDate;
 
     @NotNull(message = "The departure time is required")
