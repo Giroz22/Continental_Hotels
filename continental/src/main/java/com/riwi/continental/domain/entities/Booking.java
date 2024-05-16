@@ -2,10 +2,9 @@ package com.riwi.continental.domain.entities;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
-
-import com.riwi.continental.util.enums.StatusBooking;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +15,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity(name = "booking")
 @Data
@@ -28,20 +29,22 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private Double price;
-    private StatusBooking status;
     private LocalDate admissionDate;
     private LocalDate departureDate;
     private LocalTime admissionTime;
     private LocalTime departureTime;
-
-    // @OneToMany
-    // @JoinColumn(mappeBy = "booking", fetch = FetchType.EAGER)
-    // private List<Guets>;
-
-    // @ManyToOne
-    // @JoinColumn(name = "id_customer", referencedColumnName = "id")
-    // private List<Customer>;
-
     
+    @ManyToOne
+    @JoinColumn(name = "id_customer", referencedColumnName = "id")
+    private  Customer customer;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(
+        mappedBy = "booking",
+        fetch = FetchType.EAGER,
+        cascade = CascadeType.ALL,
+        orphanRemoval = false
+    )
+    private List<Guest> guests;    
 }

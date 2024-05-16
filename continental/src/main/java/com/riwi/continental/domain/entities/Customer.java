@@ -41,7 +41,7 @@ public class Customer {
   @Column(length = 10, nullable = false)
   private String cellphone;
 
-  @OneToMany(mappedBy = "booking", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
+  @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = false)
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   private List<Booking> booking;
