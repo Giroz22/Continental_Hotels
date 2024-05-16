@@ -1,5 +1,8 @@
 package com.riwi.continental.infrastructure.services;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,12 +13,15 @@ import com.riwi.continental.api.dto.request.BookingRequest;
 import com.riwi.continental.api.dto.response.BookingResponse;
 import com.riwi.continental.api.dto.response.CustomerToBookingResponse;
 import com.riwi.continental.api.dto.response.GuestToBookingResponse;
+import com.riwi.continental.api.dto.response.RoomToBookingResponse;
 import com.riwi.continental.domain.entities.Booking;
 import com.riwi.continental.domain.entities.Customer;
 import com.riwi.continental.domain.entities.Guest;
+import com.riwi.continental.domain.entities.Room;
 import com.riwi.continental.domain.repositories.BookingRepository;
 import com.riwi.continental.domain.repositories.CustomerRepository;
 import com.riwi.continental.infrastructure.abstract_services.IBookingService;
+import com.riwi.continental.util.enums.StatusBooking;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
 
 import lombok.AllArgsConstructor;
@@ -49,14 +55,19 @@ public class BookingService  implements IBookingService{
     public BookingResponse create(BookingRequest entity) {
 
         Booking booking = this.requestToEntity(entity, new Booking());
+        booking.setPrice(new BigDecimal(0));
+        booking.setStatus(StatusBooking.ACTIVE);
+        booking.setGuests(new ArrayList<Guest>());
+        booking.setRooms(new ArrayList<Room>());
 
         return this.entityToResponse(this.bookingRepository.save(booking));
-        
+
     }
 
     @Override
     public BookingResponse update(BookingRequest entity, String id) {
         Booking  bookingToUpdate = this.find(id);
+        System.out.println(bookingToUpdate.toString());
         Booking booking = this.requestToEntity(entity, bookingToUpdate);
 
         return this.entityToResponse(this.bookingRepository.save(booking)); 
@@ -76,6 +87,12 @@ public class BookingService  implements IBookingService{
         //Realizo la copia de entity a response
         BeanUtils.copyProperties(entity, response);
 
+        response.setGuests(entity.getGuests().stream().map(this::guestToResponse).toList());
+
+        response.setCustomer(this.costumerToResponse(entity.getCustomer()));
+
+        response.setRooms(entity.getRooms().stream().map(this::roomToResponse).toList());
+
         return response;
     }
 
@@ -94,18 +111,28 @@ public class BookingService  implements IBookingService{
         return response;
     }
 
-    private Booking requestToEntity(BookingRequest entity, Booking booking){
-        booking.setAdmissionDate(entity.getAdmissionDate());
-        booking.setDepartureDate(entity.getDepartureDate());
-        booking.setAdmissionTime(entity.getAdmissionTime());
-        booking.setDepartureTime(entity.getDepartureTime());
-        booking.setCustomer(this.customerRepository.findById(entity.getCustomer_id()).orElse(null));
+    private RoomToBookingResponse roomToResponse(Room entity){
+        RoomToBookingResponse response = new RoomToBookingResponse();
+
+        BeanUtils.copyProperties(entity, response);
+        return response;
+    } 
+
+    private Booking requestToEntity(BookingRequest request, Booking booking){
+        booking.setAdmissionDate(request.getAdmissionDate());
+        booking.setDepartureDate(request.getDepartureDate());
+        booking.setAdmissionTime(request.getAdmissionTime());
+        booking.setDepartureTime(request.getDepartureTime());
+        booking.setCustomer(this.findCustomer(request.getCustomer_id()));
         
         return booking;
     }
 
     private Booking find(String id){
         return this.bookingRepository.findById(id).orElseThrow(()-> new IdNotFoundException("Booking"));
+    }
+    private Customer findCustomer(String id){
+        return this.customerRepository.findById(id).orElseThrow(()-> new IdNotFoundException("Customer"));
     }
     
 }
