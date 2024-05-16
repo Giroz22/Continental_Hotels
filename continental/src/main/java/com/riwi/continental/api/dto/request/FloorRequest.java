@@ -1,8 +1,6 @@
 package com.riwi.continental.api.dto.request;
 
-import java.util.List;
 
-import com.riwi.continental.api.dto.response.RoomToAny;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

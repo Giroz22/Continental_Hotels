@@ -2,6 +2,7 @@ package com.riwi.continental.infrastructure.services;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import com.riwi.continental.domain.entities.Guest;
 import com.riwi.continental.domain.entities.Room;
 import com.riwi.continental.domain.repositories.BookingRepository;
 import com.riwi.continental.domain.repositories.CustomerRepository;
+import com.riwi.continental.domain.repositories.GuestRepository;
+import com.riwi.continental.domain.repositories.RoomRepository;
 import com.riwi.continental.infrastructure.abstract_services.IBookingService;
 import com.riwi.continental.util.enums.StatusBooking;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
@@ -33,16 +36,22 @@ public class BookingService  implements IBookingService{
     @Autowired
     private final BookingRepository bookingRepository ;
 
+    @Autowired
     private final CustomerRepository customerRepository;
+
+    @Autowired
+    private final GuestRepository guestRepository;
+
+    @Autowired
+    private final RoomRepository roomRepository;
 
     @Override
     
     public Page<BookingResponse> getAll(int page, int size) {
-        if(page < 0)
-        page = 0;
+        if(page < 0) page = 0;
         PageRequest pagination = PageRequest.of(page,size);
 
-        return this.bookingRepository.findAll(pagination).map(booking -> this.entityToResponse(booking));
+        return this.bookingRepository.findAll(pagination).map(this::entityToResponse);
     }
 
     @Override
@@ -53,6 +62,9 @@ public class BookingService  implements IBookingService{
 
     @Override
     public BookingResponse create(BookingRequest entity) {
+        Customer customer = this.customerRepository.findById(entity.getCustomerId()).orElseThrow(() -> new IdNotFoundException("Customer"));
+        Guest guest = this.guestRepository.findById(entity.getGuestId()).orElseThrow(() -> new IdNotFoundException("Guest"));
+        Room room = this.roomRepository.findById(entity.getRoomId()).orElseThrow(() -> new IdNotFoundException("Room"));
 
         Booking booking = this.requestToEntity(entity, new Booking());
         if (entity.getDepartureDate().isBefore(entity.getAdmissionDate().plusDays(1))) {
@@ -60,8 +72,9 @@ public class BookingService  implements IBookingService{
         }
         booking.setPrice(new BigDecimal(0));
         booking.setStatus(StatusBooking.ACTIVE);
-        booking.setGuests(new ArrayList<Guest>());
-        booking.setRooms(new ArrayList<Room>());
+        booking.setCustomer(customer);
+        booking.setGuests(new ArrayList<>());
+        booking.setRooms(new ArrayList<>());
 
         return this.entityToResponse(this.bookingRepository.save(booking));
 
@@ -70,7 +83,7 @@ public class BookingService  implements IBookingService{
     @Override
     public BookingResponse update(BookingRequest entity, String id) {
         Booking  bookingToUpdate = this.find(id);
-        System.out.println(bookingToUpdate.toString());
+
         Booking booking = this.requestToEntity(entity, bookingToUpdate);
 
         return this.entityToResponse(this.bookingRepository.save(booking)); 
@@ -126,7 +139,7 @@ public class BookingService  implements IBookingService{
         booking.setDepartureDate(request.getDepartureDate());
         booking.setAdmissionTime(request.getAdmissionTime());
         booking.setDepartureTime(request.getDepartureTime());
-        booking.setCustomer(this.findCustomer(request.getCustomer_id()));
+        booking.setCustomer(this.customerRepository.findById(request.getCustomerId()).orElseThrow(()-> new IdNotFoundException("customer")));
         
         return booking;
     }
@@ -134,8 +147,9 @@ public class BookingService  implements IBookingService{
     private Booking find(String id){
         return this.bookingRepository.findById(id).orElseThrow(()-> new IdNotFoundException("Booking"));
     }
-    private Customer findCustomer(String id){
-        return this.customerRepository.findById(id).orElseThrow(()-> new IdNotFoundException("Customer"));
-    }
+
+    // private List<GuestToBookingResponse> addGuestToBooking(String id){
+        
+    // }
     
 }
