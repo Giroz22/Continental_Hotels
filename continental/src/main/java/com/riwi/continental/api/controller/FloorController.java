@@ -40,12 +40,12 @@ public class FloorController {
         return ResponseEntity.ok(this.iFloorService.create(floorRequest));
     }
 
-    @GetMapping(path = "/update/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<FloorResponse> filterById(@PathVariable String id) {
         return ResponseEntity.ok(this.iFloorService.findById(id));
     }
 
-    @PutMapping(path = "/{id}")
+    @PutMapping(path = "/update/{id}")
     public ResponseEntity<FloorResponse> updateFloor(@PathVariable String id,
             @Validated @RequestBody FloorRequest floorRequest) {
 

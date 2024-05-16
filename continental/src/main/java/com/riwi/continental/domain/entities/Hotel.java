@@ -39,8 +39,8 @@ public class Hotel {
     @Column(nullable = false)
     private double qualification;
 
-    @Column(precision = 15, scale = 5, nullable = false)
-    private BigDecimal earnings;
+    @Column(nullable = false)
+    private double earnings;
 
     @Column(nullable = false)
     private int numberOfFloors;
