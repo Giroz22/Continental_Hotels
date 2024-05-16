@@ -14,8 +14,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -55,11 +58,12 @@ public class Booking {
     
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(
-        mappedBy = "booking",
-        fetch = FetchType.EAGER,
-        cascade = CascadeType.ALL,
-        orphanRemoval = false
+    @ManyToMany
+    @JoinTable(
+        name = "bookings_rooms",
+        joinColumns = @JoinColumn(name = "booking_id"),
+        inverseJoinColumns = @JoinColumn(name = "room_id"),
+        uniqueConstraints = { @UniqueConstraint(columnNames = {"booking_id", "room_id"})}
     )
     private List<Room> rooms; 
 }
