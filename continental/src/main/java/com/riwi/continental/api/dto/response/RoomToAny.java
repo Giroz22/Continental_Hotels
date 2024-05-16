@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -21,4 +20,5 @@ public class RoomToAny {
     private BigDecimal price;
     private int capacity;
     private String description;
+    private RoomTypeToAnyResponse roomTypeToAnyResponse;
 }
