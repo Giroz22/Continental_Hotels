@@ -55,6 +55,9 @@ public class BookingService  implements IBookingService{
     public BookingResponse create(BookingRequest entity) {
 
         Booking booking = this.requestToEntity(entity, new Booking());
+        if (entity.getDepartureDate().isBefore(entity.getAdmissionDate().plusDays(1))) {
+            throw new IllegalArgumentException(" the booking must be atleast one day.");
+        }
         booking.setPrice(new BigDecimal(0));
         booking.setStatus(StatusBooking.ACTIVE);
         booking.setGuests(new ArrayList<Guest>());
