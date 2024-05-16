@@ -15,9 +15,11 @@ import com.riwi.continental.api.dto.request.FloorRequest;
 import com.riwi.continental.api.dto.response.FloorResponse;
 import com.riwi.continental.api.dto.response.HotelToFloorResponse;
 import com.riwi.continental.api.dto.response.RoomToAny;
+import com.riwi.continental.api.dto.response.RoomTypeToAnyResponse;
 import com.riwi.continental.domain.entities.Floor;
 import com.riwi.continental.domain.entities.Hotel;
 import com.riwi.continental.domain.entities.Room;
+import com.riwi.continental.domain.entities.RoomType;
 import com.riwi.continental.domain.repositories.FloorRepository;
 import com.riwi.continental.domain.repositories.HotelRepository;
 import com.riwi.continental.infrastructure.abstract_services.IFloorService;
@@ -109,7 +111,15 @@ public class FloorService implements IFloorService {
     private RoomToAny roomToRoomToAny(Room room) {
         RoomToAny roomToAny = new RoomToAny();
         BeanUtils.copyProperties(room, roomToAny);
+        roomToAny.setRoomTypeToAnyResponse(this.roomTypeToRoomTypeToAnyResponse(room.getRoomType()));
 
         return roomToAny;
+    }
+
+    private RoomTypeToAnyResponse roomTypeToRoomTypeToAnyResponse(RoomType roomType) {
+        RoomTypeToAnyResponse roomTypeToAnyResponse = new RoomTypeToAnyResponse();
+        BeanUtils.copyProperties(roomType, roomTypeToAnyResponse);
+
+        return roomTypeToAnyResponse;
     }
 }

@@ -35,7 +35,7 @@ public class HotelService implements IHotelService {
         }
         Pageable pageable = PageRequest.of(page, size);
 
-        return this.hotelRepository.findAll(pageable).map(hotel -> this.hotelToHotelResponse(hotel));
+        return this.hotelRepository.findAll(pageable).map(this::hotelToHotelResponse);
 
     }
 
