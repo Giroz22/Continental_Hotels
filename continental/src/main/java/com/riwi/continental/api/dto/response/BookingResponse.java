@@ -21,4 +21,5 @@ public class BookingResponse {
     private LocalTime departureTime;
     private List<GuestToBookingResponse> guests;
     private CustomerToBookingResponse customer;
+    private List<RoomToBookingResponse> rooms; 
 }

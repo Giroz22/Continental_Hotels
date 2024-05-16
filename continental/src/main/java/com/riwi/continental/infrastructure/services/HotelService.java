@@ -53,14 +53,13 @@ public class HotelService implements IHotelService {
     @Override
     public HotelResponse create(HotelRequest hotelRequest) {
         Hotel hotel = this.hotelRequestToHotel(hotelRequest, new Hotel());
-
         return this.hotelToHotelResponse(this.hotelRepository.save(hotel));
     }
 
     @Override
     public HotelResponse update(HotelRequest hotelRequest, String id) {
         Hotel hotel = this.findHotelById(id);
-        hotel = this.hotelRequestToHotel(hotelRequest, hotel);
+        this.hotelRequestToHotel(hotelRequest, hotel);
 
         return this.hotelToHotelResponse(this.hotelRepository.save(hotel));
     }
@@ -76,14 +75,15 @@ public class HotelService implements IHotelService {
         HotelResponse hotelResponse = new HotelResponse();
         BeanUtils.copyProperties(hotel, hotelResponse);
         hotelResponse.setFloors(
-                hotel.getFloors().stream().map(floor -> this.floorToFloorToHotelResponse(floor))
+                hotel.getFloors().stream().map(this::floorToFloorToHotelResponse)
                         .collect(Collectors.toList()));
         return hotelResponse;
     }
 
     private Hotel hotelRequestToHotel(HotelRequest hotelRequest, Hotel hotel) {
-        hotel.setFloors(new ArrayList<>());
         BeanUtils.copyProperties(hotelRequest, hotel);
+        hotel.setFloors(new ArrayList<>());
+        hotel.setEarnings(0);
         return hotel;
     }
 

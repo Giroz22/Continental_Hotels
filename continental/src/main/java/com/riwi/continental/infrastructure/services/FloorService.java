@@ -1,7 +1,11 @@
 package com.riwi.continental.infrastructure.services;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,8 +14,10 @@ import org.springframework.stereotype.Service;
 import com.riwi.continental.api.dto.request.FloorRequest;
 import com.riwi.continental.api.dto.response.FloorResponse;
 import com.riwi.continental.api.dto.response.HotelToFloorResponse;
+import com.riwi.continental.api.dto.response.RoomToAny;
 import com.riwi.continental.domain.entities.Floor;
 import com.riwi.continental.domain.entities.Hotel;
+import com.riwi.continental.domain.entities.Room;
 import com.riwi.continental.domain.repositories.FloorRepository;
 import com.riwi.continental.domain.repositories.HotelRepository;
 import com.riwi.continental.infrastructure.abstract_services.IFloorService;
@@ -36,7 +42,7 @@ public class FloorService implements IFloorService {
         }
         Pageable pageable = PageRequest.of(page, size);
 
-        return this.floorRepository.findAll(pageable).map(floor -> this.floorToFloorResponse(floor));
+        return this.floorRepository.findAll(pageable).map(this::floorToFloorResponse);
     }
 
     @Override
@@ -64,7 +70,7 @@ public class FloorService implements IFloorService {
     public FloorResponse update(FloorRequest floorRequest, String id) {
         Floor floor = this.findFloorById(id);
 
-        floor = this.floorRequestToFloor(floorRequest, floor);
+        this.floorRequestToFloor(floorRequest, floor);
         Hotel hotel = this.hotelRepository.findById(floorRequest.getHotelId())
                 .orElseThrow(() -> new IdNotFoundException("Hotel"));
         floor.setHotel(hotel);
@@ -88,12 +94,22 @@ public class FloorService implements IFloorService {
 
         floorResponse.setHotelToFloorResponse(hotelToFloorResponse);
 
+        floorResponse.setRooms(floor.getRooms().stream().map(this::roomToRoomToAny).collect(Collectors.toList()));
+
         return floorResponse;
     }
 
     private Floor floorRequestToFloor(FloorRequest floorRequest, Floor floor) {
         BeanUtils.copyProperties(floorRequest, floor);
         floor.setStatusFloor(StatusFloor.AVAILABLE);
+        floor.setRooms(new ArrayList<>());
         return floor;
+    }
+
+    private RoomToAny roomToRoomToAny(Room room) {
+        RoomToAny roomToAny = new RoomToAny();
+        BeanUtils.copyProperties(room, roomToAny);
+
+        return roomToAny;
     }
 }
