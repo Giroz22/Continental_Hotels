@@ -53,4 +53,6 @@ public class RoomRequest {
     @Size(min = 0, max = 36)
     @NotBlank(message = "The room floor is required")
     private String floorId;
+
+    
 }
