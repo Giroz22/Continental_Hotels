@@ -1,9 +1,8 @@
 package com.riwi.continental.api.dto.response;
 
-
 import java.math.BigDecimal;
+import java.util.List;
 
-import com.riwi.continental.domain.entities.Booking;
 import com.riwi.continental.util.enums.StateRoom;
 
 import lombok.AllArgsConstructor;
@@ -24,5 +23,5 @@ public class RoomResponse {
     private String description;
     private RoomTypeToAnyResponse roomType;
     private FloorToAny floor;
-    private Booking booking;
+    private List<BookingToRoomsResponse> bookings;
 }

@@ -16,4 +16,5 @@ public class CustomerToBookingResponse {
   private int age;
   private String idDocument;
   private String cellphone;
+  
 }

@@ -1,6 +1,5 @@
 package com.riwi.continental.api.dto.request;
 
-
 import java.math.BigDecimal;
 
 import com.riwi.continental.util.enums.StateRoom;
@@ -29,29 +28,31 @@ public class RoomRequest {
     @Enumerated(EnumType.STRING)
     private StateRoom state;
 
-    @NotNull( message = "The room number is requaried")
+    @NotNull(message = "The room number is required")
     @PositiveOrZero(message = "The room number must be positive or greater then zero")
     private int roomNum;
 
-    @NotNull(message = "The room price is requaried")
+    @NotNull(message = "The room price is required")
     @PositiveOrZero(message = "The price must be positive or greater then zero")
     private BigDecimal price;
 
-    @NotNull(message = "The room capacity is requaried")
+    @NotNull(message = "The room capacity is required")
     @Min(value = 1, message = "The capicity of the room must be more than one person")
     @Max(value = 15, message = "The capacity of the room must be less than fifteen persons")
     @Digits(integer = 2, fraction = 0, message = "The number is not valid")
     private int capicity;
 
-    @NotNull(message = "The room description is requaried")
+    @NotNull(message = "The room description is required")
     @Lob
     private String description;
-    
+
     @Size(min = 0, max = 36)
-    @NotBlank(message = "The room type is requaried")
+    @NotBlank(message = "The room type is required")
     private String roomTypeId;
 
     @Size(min = 0, max = 36)
-    @NotBlank(message = "The room floor is requaried")
+    @NotBlank(message = "The room floor is required")
     private String floorId;
+
+    
 }
