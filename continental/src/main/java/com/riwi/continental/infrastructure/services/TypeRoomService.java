@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.riwi.continental.api.dto.request.RoomTypeRequest;
-import com.riwi.continental.api.dto.response.RoomToAny;
+import com.riwi.continental.api.dto.response.RoomToRoomTypeResponse;
 import com.riwi.continental.api.dto.response.RoomTypeResponse;
 import com.riwi.continental.domain.entities.Room;
 import com.riwi.continental.domain.entities.RoomType;
@@ -63,13 +63,13 @@ public class TypeRoomService implements IRoomTypeService {
         RoomTypeResponse response = new RoomTypeResponse();
         BeanUtils.copyProperties(entity, response);
 
-        response.setRooms(entity.getRooms().stream().map(this::roomToTypeRoom).collect(Collectors.toList()));
+        response.setRooms(entity.getRooms().stream().map(this::roomToRoomToTypeRoom).collect(Collectors.toList()));
         return response;
 
     }
 
-    private RoomToAny roomToTypeRoom(Room entity){
-        RoomToAny response = new RoomToAny();
+    private RoomToRoomTypeResponse roomToRoomToTypeRoom(Room entity){
+        RoomToRoomTypeResponse response = new RoomToRoomTypeResponse();
         BeanUtils.copyProperties(entity, response);
         return response;
     }
@@ -83,6 +83,5 @@ public class TypeRoomService implements IRoomTypeService {
     private RoomType find(String id){
         return this.typeRoomRepository.findById(id).orElseThrow();
     }
-
 
 }

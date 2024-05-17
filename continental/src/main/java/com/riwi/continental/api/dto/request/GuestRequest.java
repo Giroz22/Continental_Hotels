@@ -29,6 +29,6 @@ public class GuestRequest {
   @NotNull(message = "The age category is required")
   private AgeCategory ageCategory;
   @NotBlank(message = "The booking id is required")
-  private String BookingId;
+  private String bookingId;
 
 }

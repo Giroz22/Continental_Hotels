@@ -32,5 +32,11 @@ public class BookingRequest {
     private LocalTime admissionTime;
 
     @NotNull(message = "The customer id is required")
-    private String customer_id;
+    private String customerId;
+
+    @NotNull(message = "The room id is required")
+    private String roomId;
+
+    @NotNull(message = "The guest id is required")
+    private String guestId;
 }

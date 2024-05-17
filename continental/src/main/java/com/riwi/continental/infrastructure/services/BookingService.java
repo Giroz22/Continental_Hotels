@@ -2,6 +2,7 @@ package com.riwi.continental.infrastructure.services;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,20 @@ import org.springframework.stereotype.Service;
 import com.riwi.continental.api.dto.request.BookingRequest;
 import com.riwi.continental.api.dto.response.BookingResponse;
 import com.riwi.continental.api.dto.response.CustomerToBookingResponse;
+import com.riwi.continental.api.dto.response.FloorToAny;
 import com.riwi.continental.api.dto.response.GuestToBookingResponse;
 import com.riwi.continental.api.dto.response.RoomToBookingResponse;
+import com.riwi.continental.api.dto.response.RoomTypeToAnyResponse;
 import com.riwi.continental.domain.entities.Booking;
 import com.riwi.continental.domain.entities.Customer;
+import com.riwi.continental.domain.entities.Floor;
 import com.riwi.continental.domain.entities.Guest;
 import com.riwi.continental.domain.entities.Room;
+import com.riwi.continental.domain.entities.RoomType;
 import com.riwi.continental.domain.repositories.BookingRepository;
 import com.riwi.continental.domain.repositories.CustomerRepository;
+import com.riwi.continental.domain.repositories.GuestRepository;
+import com.riwi.continental.domain.repositories.RoomRepository;
 import com.riwi.continental.infrastructure.abstract_services.IBookingService;
 import com.riwi.continental.util.enums.StatusBooking;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
@@ -28,21 +35,27 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class BookingService  implements IBookingService{
+public class BookingService implements IBookingService {
 
     @Autowired
-    private final BookingRepository bookingRepository ;
+    private final BookingRepository bookingRepository;
 
+    @Autowired
     private final CustomerRepository customerRepository;
 
-    @Override
-    
-    public Page<BookingResponse> getAll(int page, int size) {
-        if(page < 0)
-        page = 0;
-        PageRequest pagination = PageRequest.of(page,size);
+    @Autowired
+    private final GuestRepository guestRepository;
 
-        return this.bookingRepository.findAll(pagination).map(booking -> this.entityToResponse(booking));
+    @Autowired
+    private final RoomRepository roomRepository;
+
+    @Override
+    public Page<BookingResponse> getAll(int page, int size) {
+        if (page < 0)
+            page = 0;
+        PageRequest pagination = PageRequest.of(page, size);
+
+        return this.bookingRepository.findAll(pagination).map(this::entityToResponse);
     }
 
     @Override
@@ -53,6 +66,11 @@ public class BookingService  implements IBookingService{
 
     @Override
     public BookingResponse create(BookingRequest entity) {
+        Customer customer = this.customerRepository.findById(entity.getCustomerId())
+                .orElseThrow(() -> new IdNotFoundException("Customer"));
+        Guest guest = this.guestRepository.findById(entity.getGuestId())
+                .orElseThrow(() -> new IdNotFoundException("Guest"));
+        Room room = this.roomRepository.findById(entity.getRoomId()).orElseThrow(() -> new IdNotFoundException("Room"));
 
         Booking booking = this.requestToEntity(entity, new Booking());
         if (entity.getDepartureDate().isBefore(entity.getAdmissionDate().plusDays(1))) {
@@ -60,8 +78,9 @@ public class BookingService  implements IBookingService{
         }
         booking.setPrice(new BigDecimal(0));
         booking.setStatus(StatusBooking.ACTIVE);
-        booking.setGuests(new ArrayList<Guest>());
-        booking.setRooms(new ArrayList<Room>());
+        booking.setCustomer(customer);
+        booking.setGuests(new ArrayList<>());
+        booking.setRooms(new ArrayList<>());
 
         return this.entityToResponse(this.bookingRepository.save(booking));
 
@@ -69,25 +88,25 @@ public class BookingService  implements IBookingService{
 
     @Override
     public BookingResponse update(BookingRequest entity, String id) {
-        Booking  bookingToUpdate = this.find(id);
-        System.out.println(bookingToUpdate.toString());
+        Booking bookingToUpdate = this.find(id);
+
         Booking booking = this.requestToEntity(entity, bookingToUpdate);
 
-        return this.entityToResponse(this.bookingRepository.save(booking)); 
+        return this.entityToResponse(this.bookingRepository.save(booking));
     }
 
     @Override
     public void delete(String id) {
-       Booking booking = this.find(id);
-       this.bookingRepository.delete(booking);
+        Booking booking = this.find(id);
+        this.bookingRepository.delete(booking);
     }
 
-    //Metodo para convertir una entidad en el dto de  respuesta de la entidad
+    // Metodo para convertir una entidad en el dto de respuesta de la entidad
 
-    private BookingResponse entityToResponse(Booking entity){
+    private BookingResponse entityToResponse(Booking entity) {
         BookingResponse response = new BookingResponse();
 
-        //Realizo la copia de entity a response
+        // Realizo la copia de entity a response
         BeanUtils.copyProperties(entity, response);
 
         response.setGuests(entity.getGuests().stream().map(this::guestToResponse).toList());
@@ -99,7 +118,7 @@ public class BookingService  implements IBookingService{
         return response;
     }
 
-    private GuestToBookingResponse guestToResponse(Guest entity){
+    private GuestToBookingResponse guestToResponse(Guest entity) {
         GuestToBookingResponse response = new GuestToBookingResponse();
 
         BeanUtils.copyProperties(entity, response);
@@ -107,35 +126,52 @@ public class BookingService  implements IBookingService{
         return response;
     }
 
-    private CustomerToBookingResponse costumerToResponse(Customer entity){
+    private CustomerToBookingResponse costumerToResponse(Customer entity) {
         CustomerToBookingResponse response = new CustomerToBookingResponse();
 
         BeanUtils.copyProperties(entity, response);
         return response;
     }
 
-    private RoomToBookingResponse roomToResponse(Room entity){
+    private RoomToBookingResponse roomToResponse(Room entity) {
         RoomToBookingResponse response = new RoomToBookingResponse();
 
         BeanUtils.copyProperties(entity, response);
+        response.setRoomType(this.roomTypeToRoomTypeToAny(entity.getRoomType()));
+        response.setFloor(this.floorToFloorToAny(entity.getFloor()));
         return response;
-    } 
+    }
 
-    private Booking requestToEntity(BookingRequest request, Booking booking){
+    private Booking requestToEntity(BookingRequest request, Booking booking) {
         booking.setAdmissionDate(request.getAdmissionDate());
         booking.setDepartureDate(request.getDepartureDate());
         booking.setAdmissionTime(request.getAdmissionTime());
         booking.setDepartureTime(request.getDepartureTime());
-        booking.setCustomer(this.findCustomer(request.getCustomer_id()));
-        
+        booking.setCustomer(this.customerRepository.findById(request.getCustomerId())
+                .orElseThrow(() -> new IdNotFoundException("customer")));
+
         return booking;
     }
 
-    private Booking find(String id){
-        return this.bookingRepository.findById(id).orElseThrow(()-> new IdNotFoundException("Booking"));
+    private Booking find(String id) {
+        return this.bookingRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Booking"));
     }
-    private Customer findCustomer(String id){
-        return this.customerRepository.findById(id).orElseThrow(()-> new IdNotFoundException("Customer"));
+
+    // private List<GuestToBookingResponse> addGuestToBooking(String id){
+
+    // }
+
+    private RoomTypeToAnyResponse roomTypeToRoomTypeToAny(RoomType roomType) {
+        RoomTypeToAnyResponse roomTypeToAnyResponse = new RoomTypeToAnyResponse();
+        BeanUtils.copyProperties(roomType, roomTypeToAnyResponse);
+
+        return roomTypeToAnyResponse;
     }
-    
+
+    private FloorToAny floorToFloorToAny(Floor floor) {
+        FloorToAny floorToAny = new FloorToAny();
+        BeanUtils.copyProperties(floor, floorToAny);
+
+        return floorToAny;
+    }
 }
