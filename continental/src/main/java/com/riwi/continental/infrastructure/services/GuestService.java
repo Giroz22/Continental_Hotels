@@ -109,6 +109,7 @@ public class GuestService implements IGuestService {
     BeanUtils.copyProperties(customer, customerToBookingResponse);
 
     return customerToBookingResponse;
+
   }
 
 }

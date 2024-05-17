@@ -12,10 +12,16 @@ import org.springframework.stereotype.Service;
 import com.riwi.continental.api.dto.request.CustomerRequest;
 import com.riwi.continental.api.dto.response.BookingToCustomerResponse;
 import com.riwi.continental.api.dto.response.CustomerResponse;
+import com.riwi.continental.api.dto.response.FloorToAny;
 import com.riwi.continental.api.dto.response.GuestToBookingResponse;
+import com.riwi.continental.api.dto.response.RoomToBookingResponse;
+import com.riwi.continental.api.dto.response.RoomTypeToAnyResponse;
 import com.riwi.continental.domain.entities.Booking;
 import com.riwi.continental.domain.entities.Customer;
+import com.riwi.continental.domain.entities.Floor;
 import com.riwi.continental.domain.entities.Guest;
+import com.riwi.continental.domain.entities.Room;
+import com.riwi.continental.domain.entities.RoomType;
 import com.riwi.continental.domain.repositories.CustomerRepository;
 import com.riwi.continental.infrastructure.abstract_services.ICustomerService;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
@@ -75,7 +81,7 @@ public class CustomerService implements ICustomerService {
 
     BeanUtils.copyProperties(entity, response);
     response.setGuests(entity.getGuests().stream().map(this::guestToGuestToBooking).collect(Collectors.toList()));
-
+    response.setRooms(entity.getRooms().stream().map(this::roomToRoomToBooking).collect(Collectors.toList()));
     return response;
   }
 
@@ -101,6 +107,27 @@ public class CustomerService implements ICustomerService {
     BeanUtils.copyProperties(guest, guestToBookingResponse);
 
     return guestToBookingResponse;
+  }
+
+  private RoomToBookingResponse roomToRoomToBooking(Room room) {
+    RoomToBookingResponse roomToBookingResponse = new RoomToBookingResponse();
+    BeanUtils.copyProperties(room, roomToBookingResponse);
+    roomToBookingResponse.setRoomType(this.roomTypeToRoomTypeToAny(room.getRoomType()));
+    roomToBookingResponse.setFloor(this.floorToFloorToAny(room.getFloor()));
+    return roomToBookingResponse;
+  }
+
+  private FloorToAny floorToFloorToAny(Floor floor) {
+    FloorToAny floorToAny = new FloorToAny();
+    BeanUtils.copyProperties(floor, floorToAny);
+
+    return floorToAny;
+  }
+
+  private RoomTypeToAnyResponse roomTypeToRoomTypeToAny(RoomType roomType) {
+    RoomTypeToAnyResponse roomTypeToAnyResponse = new RoomTypeToAnyResponse();
+    BeanUtils.copyProperties(roomType, roomTypeToAnyResponse);
+    return roomTypeToAnyResponse;
   }
 
 }

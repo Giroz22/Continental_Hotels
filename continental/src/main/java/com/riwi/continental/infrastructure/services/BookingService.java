@@ -50,7 +50,6 @@ public class BookingService implements IBookingService {
     private final RoomRepository roomRepository;
 
     @Override
-
     public Page<BookingResponse> getAll(int page, int size) {
         if (page < 0)
             page = 0;
