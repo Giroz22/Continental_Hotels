@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class RoomToBookingResponse {
+
     private String id;
     private StateRoom state;
     private int roomNum;
@@ -22,4 +23,5 @@ public class RoomToBookingResponse {
     private String description;
     private RoomTypeToAnyResponse roomType;
     private FloorToAny floor;
+
 }
