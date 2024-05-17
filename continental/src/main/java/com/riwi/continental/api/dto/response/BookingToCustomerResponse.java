@@ -1,10 +1,10 @@
 package com.riwi.continental.api.dto.response;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import com.riwi.continental.domain.entities.Guest;
 import com.riwi.continental.util.enums.StatusBooking;
 
 import lombok.AllArgsConstructor;
@@ -18,11 +18,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BookingToCustomerResponse {
   private String id;
-  private Double price;
+  private BigDecimal price;
   private StatusBooking status;
   private LocalDate admissionDate;
   private LocalDate departureDate;
   private LocalTime admissionTime;
   private LocalTime departureTime;
-  private List<Guest> guests;
+  private List<GuestToBookingResponse> guests;
 }

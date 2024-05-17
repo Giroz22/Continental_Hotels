@@ -35,7 +35,7 @@ public class GuestController {
     @RequestParam(defaultValue = "5") int size
   ){
 
-    return ResponseEntity.ok(this.iGuestService.getAll(page, size));
+    return ResponseEntity.ok(this.iGuestService.getAll(page - 1, size));
   }
 
   @PostMapping

@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import com.riwi.continental.api.dto.request.CustomerRequest;
 import com.riwi.continental.api.dto.response.BookingToCustomerResponse;
 import com.riwi.continental.api.dto.response.CustomerResponse;
+import com.riwi.continental.api.dto.response.GuestToBookingResponse;
 import com.riwi.continental.domain.entities.Booking;
 import com.riwi.continental.domain.entities.Customer;
+import com.riwi.continental.domain.entities.Guest;
 import com.riwi.continental.domain.repositories.CustomerRepository;
 import com.riwi.continental.infrastructure.abstract_services.ICustomerService;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
@@ -22,17 +24,18 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class CustomerService implements ICustomerService{
+public class CustomerService implements ICustomerService {
 
   @Autowired
   private final CustomerRepository customerRepository;
 
   @Override
   public Page<CustomerResponse> getAll(int page, int size) {
-    if(page < 0) page = 0;
+    if (page < 0)
+      page = 0;
 
     PageRequest pagination = PageRequest.of(page, size);
-    return this.customerRepository.findAll(pagination).map(customer -> this.entityToResponse(customer));
+    return this.customerRepository.findAll(pagination).map(this::entityToResponse);
   }
 
   @Override
@@ -60,24 +63,25 @@ public class CustomerService implements ICustomerService{
     this.customerRepository.delete(customer);
   }
 
-  private CustomerResponse entityToResponse(Customer entity){
+  private CustomerResponse entityToResponse(Customer entity) {
     CustomerResponse response = new CustomerResponse();
     BeanUtils.copyProperties(entity, response);
-    response.setBooking(entity.getBooking().stream().map(booking -> this.bookingToResponse(booking)).collect(Collectors.toList()));
+    response.setBooking(entity.getBooking().stream().map(this::bookingToResponse).collect(Collectors.toList()));
     return response;
   }
 
-  private BookingToCustomerResponse bookingToResponse (Booking entity) {
-    BookingToCustomerResponse response = new BookingToCustomerResponse ();
+  private BookingToCustomerResponse bookingToResponse(Booking entity) {
+    BookingToCustomerResponse response = new BookingToCustomerResponse();
 
     BeanUtils.copyProperties(entity, response);
+    response.setGuests(entity.getGuests().stream().map(this::guestToGuestToBooking).collect(Collectors.toList()));
 
     return response;
   }
 
-  //debe sarlir una lista en booking todas las reservas que tiene el cliente
+  // debe sarlir una lista en booking todas las reservas que tiene el cliente
 
-  private Customer requestToEntity(CustomerRequest entity, Customer customer){
+  private Customer requestToEntity(CustomerRequest entity, Customer customer) {
     customer.setName(entity.getName());
     customer.setLastname(entity.getLastname());
     customer.setAge(entity.getAge());
@@ -88,8 +92,15 @@ public class CustomerService implements ICustomerService{
     return customer;
   }
 
-  private Customer find(String id){
-    return this.customerRepository.findById(id).orElseThrow(()-> new IdNotFoundException("Customer"));
+  private Customer find(String id) {
+    return this.customerRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Customer"));
+  }
+
+  private GuestToBookingResponse guestToGuestToBooking(Guest guest) {
+    GuestToBookingResponse guestToBookingResponse = new GuestToBookingResponse();
+    BeanUtils.copyProperties(guest, guestToBookingResponse);
+
+    return guestToBookingResponse;
   }
 
 }

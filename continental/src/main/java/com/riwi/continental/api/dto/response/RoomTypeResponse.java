@@ -17,5 +17,5 @@ public class RoomTypeResponse {
     private String name;
     private String description;
     private BigDecimal baseValue;
-    private List<RoomToAny> rooms;
+    private List<RoomToRoomTypeResponse> rooms;
 }

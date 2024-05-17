@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.riwi.continental.api.dto.request.GuestRequest;
 import com.riwi.continental.api.dto.response.BookingToGuestResponse;
+import com.riwi.continental.api.dto.response.CustomerToBookingResponse;
 import com.riwi.continental.api.dto.response.GuestResponse;
 import com.riwi.continental.domain.entities.Booking;
+import com.riwi.continental.domain.entities.Customer;
 import com.riwi.continental.domain.entities.Guest;
 import com.riwi.continental.domain.repositories.BookingRepository;
 import com.riwi.continental.domain.repositories.GuestRepository;
@@ -21,7 +23,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class GuestService  implements IGuestService{
+public class GuestService implements IGuestService {
 
   @Autowired
   private final GuestRepository guestRepository;
@@ -31,10 +33,11 @@ public class GuestService  implements IGuestService{
 
   @Override
   public Page<GuestResponse> getAll(int page, int size) {
-    if (page<0) page =0;
+    if (page < 0)
+      page = 0;
 
     PageRequest pagination = PageRequest.of(page, size);
-    return this.guestRepository.findAll(pagination).map(guest -> this.entityToResponse(guest));
+    return this.guestRepository.findAll(pagination).map(this::entityToResponse);
   }
 
   @Override
@@ -44,20 +47,22 @@ public class GuestService  implements IGuestService{
 
   @Override
   public GuestResponse create(GuestRequest request) {
-    Booking booking = this.bookingRepository.findById(request.getBookingId()).orElseThrow(() -> new IdNotFoundException("Booking"));
+    Booking booking = this.bookingRepository.findById(request.getBookingId())
+        .orElseThrow(() -> new IdNotFoundException("Booking"));
     Guest guest = this.requestToGuest(request, new Guest());
     guest.setBooking(booking);
-    
+
     return this.entityToResponse(this.guestRepository.save(guest));
-    }
+  }
 
   @Override
   public GuestResponse update(GuestRequest request, String id) {
     Guest guest = this.find(id);
 
-    Booking booking = this.bookingRepository.findById(request.getBookingId()).orElseThrow(() -> new IdNotFoundException("Booking"));
-  
-    guest = this.requestToGuest(request, guest);
+    Booking booking = this.bookingRepository.findById(request.getBookingId())
+        .orElseThrow(() -> new IdNotFoundException("Booking"));
+
+    this.requestToGuest(request, guest);
     guest.setBooking(booking);
     guest.setAgeCategory(request.getAgeCategory());
 
@@ -70,7 +75,7 @@ public class GuestService  implements IGuestService{
     this.guestRepository.delete(guest);
   }
 
-  private GuestResponse entityToResponse(Guest entity){
+  private GuestResponse entityToResponse(Guest entity) {
     GuestResponse response = new GuestResponse();
     BeanUtils.copyProperties(entity, response);
 
@@ -78,11 +83,14 @@ public class GuestService  implements IGuestService{
 
     BeanUtils.copyProperties(entity.getBooking(), bookingDTO);
 
+    bookingDTO.setCustomer(this.customerToCustomerToBookingResponse(entity.getBooking().getCustomer()));
+
     response.setBooking(bookingDTO);
+
     return response;
   }
 
-  private Guest requestToGuest (GuestRequest request, Guest entity){
+  private Guest requestToGuest(GuestRequest request, Guest entity) {
     entity.setIdDocument(request.getIdDocument());
     entity.setName(request.getName());
     entity.setLastname(request.getLastname());
@@ -92,7 +100,15 @@ public class GuestService  implements IGuestService{
     return entity;
   }
 
-  private Guest find (String id){
-  return this.guestRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Guest"));
+  private Guest find(String id) {
+    return this.guestRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Guest"));
   }
+
+  private CustomerToBookingResponse customerToCustomerToBookingResponse(Customer customer) {
+    CustomerToBookingResponse customerToBookingResponse = new CustomerToBookingResponse();
+    BeanUtils.copyProperties(customer, customerToBookingResponse);
+
+    return customerToBookingResponse;
+  }
+
 }
