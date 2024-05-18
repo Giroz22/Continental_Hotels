@@ -13,12 +13,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoomToAny {
-    private String id;
-    private StateRoom state;
-    private int roomNum;
-    private BigDecimal price;
-    private int capacity;
-    private String description;
-    private RoomTypeToAnyResponse roomTypeToAnyResponse;
+public class RoomToRoomTypeResponse {
+
+  private String id;
+  private StateRoom state;
+  private int roomNum;
+  private BigDecimal price;
+  private int capacity;
+  private String description;
+
 }

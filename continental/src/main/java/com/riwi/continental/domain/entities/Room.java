@@ -65,5 +65,5 @@ public class Room {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "rooms")
-    private List<Booking> booking;
+    private List<Booking> bookings;
 }
