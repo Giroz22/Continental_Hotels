@@ -47,7 +47,7 @@ public class BookingController {
         return ResponseEntity.ok(this.bookingService.getAll(page-1, size));
     }
 
-    @Operation(summary = "Get all the bookings find with a id")
+    @Operation(summary = "Get a bookings find with a id")
     @ApiResponse(responseCode = "400", description = "When the id is not valid", content = {
         @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
     @GetMapping(path = "/{id}")

@@ -48,7 +48,7 @@ public class CustomerController {
       return ResponseEntity.ok(this.iCustomerService.create(customer));
     }
 
-  @Operation(summary = "Get all the customer find with a id")
+  @Operation(summary = "Get a customer find with a id")
   @ApiResponse(responseCode = "400", description = "When the id is not valid", content = {
       @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
   @GetMapping(path = "/{id}")
