@@ -47,7 +47,7 @@ public class GuestController {
     return ResponseEntity.ok(this.iGuestService.getAll(page - 1, size));
   }
 
-  @Operation(summary = "This method create a guest with the dates sent")
+  @Operation(summary = "This method allows create a guest with the dates sent")
     @ApiResponse(responseCode = "400", description = "When there is an error in the date sent to the datebase", content = {
         @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorsResponse.class))})
   @PostMapping
@@ -56,7 +56,7 @@ public class GuestController {
       return ResponseEntity.ok(this.iGuestService.create(guest));
     }
 
-  @Operation(summary = "Get a guest find with a id")
+  @Operation(summary = "this method allows get a guest find with a id")
     @ApiResponse(responseCode = "400", description = "When the id is not valid", content = {
         @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
   @GetMapping(path = "/{id}")

@@ -31,7 +31,7 @@ import lombok.AllArgsConstructor;
 public class CustomerController {
   private final ICustomerService iCustomerService;
 
-  @Operation(summary = "Get all the list of customer in paginated form")
+  @Operation(summary = "this method allows get all the list of customer in paginated form")
     @ApiResponse(responseCode = "400", description = "When the connection with the data base fail", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorsResponse.class))})
   @GetMapping
@@ -39,7 +39,7 @@ public class CustomerController {
     return ResponseEntity.ok(this.iCustomerService.getAll(page - 1, size));
   }
 
-  @Operation(summary = "This method create a customer with the dates sent")
+  @Operation(summary = "This method allows create a customer with the dates sent")
     @ApiResponse(responseCode = "400", description = "When there is an error in the date sent to the datebase", content = {
         @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorsResponse.class))})
   @PostMapping
@@ -48,7 +48,7 @@ public class CustomerController {
       return ResponseEntity.ok(this.iCustomerService.create(customer));
     }
 
-  @Operation(summary = "Get a customer find with a id")
+  @Operation(summary = "this method allows get a customer find with a id")
   @ApiResponse(responseCode = "400", description = "When the id is not valid", content = {
       @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
   @GetMapping(path = "/{id}")

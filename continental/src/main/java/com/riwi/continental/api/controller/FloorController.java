@@ -34,7 +34,7 @@ public class FloorController {
     @Autowired
     private final IFloorService iFloorService;
 
-    @Operation(summary = "Get all the list of floors in paginated form")
+    @Operation(summary = "this method allows get all the list of floors in paginated form")
     @ApiResponse(responseCode = "400", description = "When the connection with the data base fail", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorsResponse.class))})
     @GetMapping
@@ -43,7 +43,7 @@ public class FloorController {
         return ResponseEntity.ok(this.iFloorService.getAll(page - 1, size));
     }
 
-    @Operation(summary = "This method create a floor with the dates sent")
+    @Operation(summary = "This method allows create a floor with the dates sent")
     @ApiResponse(responseCode = "400", description = "When there is an error in the date sent to the datebase", content = {
         @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorsResponse.class))})
     @PostMapping(path = "/add")
@@ -52,7 +52,7 @@ public class FloorController {
         return ResponseEntity.ok(this.iFloorService.create(floorRequest));
     }
 
-    @Operation(summary = "Get a floor find with a id")
+    @Operation(summary = "this method allows get a floor find with a id")
     @ApiResponse(responseCode = "400", description = "When the id is not valid", content = {
         @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
     @GetMapping(path = "/{id}")
