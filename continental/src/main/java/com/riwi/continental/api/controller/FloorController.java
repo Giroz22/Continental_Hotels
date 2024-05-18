@@ -13,10 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.riwi.continental.api.dto.errors.ErrorResponse;
+import com.riwi.continental.api.dto.errors.ErrorsResponse;
 import com.riwi.continental.api.dto.request.FloorRequest;
 import com.riwi.continental.api.dto.response.FloorResponse;
 import com.riwi.continental.infrastructure.abstract_services.IFloorService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -28,23 +34,35 @@ public class FloorController {
     @Autowired
     private final IFloorService iFloorService;
 
+    @Operation(summary = "Get all the list of floors in paginated form")
+    @ApiResponse(responseCode = "400", description = "When the connection with the data base fail", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorsResponse.class))})
     @GetMapping
     public ResponseEntity<Page<FloorResponse>> showFloors(@RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "3") int size) {
         return ResponseEntity.ok(this.iFloorService.getAll(page - 1, size));
     }
 
+    @Operation(summary = "This method create a floor with the dates sent")
+    @ApiResponse(responseCode = "400", description = "When there is an error in the date sent to the datebase", content = {
+        @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorsResponse.class))})
     @PostMapping(path = "/add")
     public ResponseEntity<FloorResponse> addFloor(@Validated @RequestBody FloorRequest floorRequest) {
 
         return ResponseEntity.ok(this.iFloorService.create(floorRequest));
     }
 
+    @Operation(summary = "Get a floor find with a id")
+    @ApiResponse(responseCode = "400", description = "When the id is not valid", content = {
+        @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
     @GetMapping(path = "/{id}")
     public ResponseEntity<FloorResponse> filterById(@PathVariable String id) {
         return ResponseEntity.ok(this.iFloorService.findById(id));
     }
 
+    @Operation(summary = "This method allows you modify a floor for a id especific")
+    @ApiResponse(responseCode = "400", description = "When the id it's not valid", content = {
+        @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
     @PutMapping(path = "/update/{id}")
     public ResponseEntity<FloorResponse> updateFloor(@PathVariable String id,
             @Validated @RequestBody FloorRequest floorRequest) {
@@ -52,6 +70,9 @@ public class FloorController {
         return ResponseEntity.ok(this.iFloorService.update(floorRequest, id));
     }
 
+    @Operation(summary = "This method allows you delete a floor for a id especific")
+    @ApiResponse(responseCode = "400", description = "When the id it's not valid", content = {
+        @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteFloor(@PathVariable String id) {
         this.iFloorService.delete(id);
