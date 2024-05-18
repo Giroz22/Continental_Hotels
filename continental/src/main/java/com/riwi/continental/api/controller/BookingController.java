@@ -35,7 +35,7 @@ public class BookingController {
     private final IBookingService bookingService;
 
     
-    @Operation(summary = "Get all the list of bookings in paginated form")
+    @Operation(summary = "this method allows get all the list of bookings in paginated form")
     @ApiResponse(responseCode = "400", description = "When the connection with the data base fail", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorsResponse.class))})
     @GetMapping
@@ -47,7 +47,7 @@ public class BookingController {
         return ResponseEntity.ok(this.bookingService.getAll(page-1, size));
     }
 
-    @Operation(summary = "Get all the bookings find with a id")
+    @Operation(summary = "this method allows get a bookings find with a id")
     @ApiResponse(responseCode = "400", description = "When the id is not valid", content = {
         @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
     @GetMapping(path = "/{id}")
@@ -57,7 +57,7 @@ public class BookingController {
         return ResponseEntity.ok(this.bookingService.findById(id));
     }
 
-    @Operation(summary = "This method create a booking with the dates sent")
+    @Operation(summary = "This method allows create a booking with the dates sent")
     @ApiResponse(responseCode = "400", description = "When there is an error in the date sent to the datebase", content = {
         @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorsResponse.class))})
     @PostMapping
