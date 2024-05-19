@@ -10,11 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerToBookingResponse {
-
+  private String id;
   private String name;
   private String lastname;
   private int age;
   private String idDocument;
   private String cellphone;
-  
 }

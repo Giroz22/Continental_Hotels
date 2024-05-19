@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GuestResponse {
-  private String idDocument;
   private String id;
+  private String idDocument;
   private String name;
   private String lastname;
   private int age;

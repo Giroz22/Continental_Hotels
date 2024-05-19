@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.riwi.continental.api.dto.errors.BaseErrorResponse;
 import com.riwi.continental.api.dto.errors.ErrorResponse;
 import com.riwi.continental.api.dto.errors.ErrorsResponse;
+import com.riwi.continental.util.exceptions.BookingException;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
 
 @RestControllerAdvice
@@ -22,6 +23,15 @@ public class BadRequestController {
 
     return ErrorResponse.builder().message(exception.getMessage()).status(HttpStatus.BAD_REQUEST.name())
         .code(HttpStatus.BAD_REQUEST.value()).build();
+  }
+
+  @ExceptionHandler(BookingException.class)
+  public BaseErrorResponse BookingException(BookingException exception) {
+    return ErrorResponse.builder()
+    .message(exception.getMessage())
+    .status(HttpStatus.BAD_REQUEST.name())
+    .code(HttpStatus.BAD_REQUEST.value())
+    .build();
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
