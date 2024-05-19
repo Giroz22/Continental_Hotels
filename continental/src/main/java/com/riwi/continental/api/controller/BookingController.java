@@ -51,7 +51,6 @@ public class BookingController {
     public ResponseEntity<BookingResponse> insert(
         @Validated @RequestBody BookingRequest booking)
         {
-            this.bookingService.create(booking);
             return ResponseEntity.ok(this.bookingService.create(booking));
         }
 

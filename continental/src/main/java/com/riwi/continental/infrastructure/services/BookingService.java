@@ -110,10 +110,8 @@ public class BookingService implements IBookingService {
 
                 boolean isSameBokking = bookingActive.getId() == idBooking; 
                 
-                if (isRoomAvailable){ 
-                    System.out.println("No disponible");
-                    if(!isSameBokking){
-                        System.out.println("Es otra reserva");
+                if (isRoomAvailable){                 
+                    if(!isSameBokking){                        
                         throw new BookingException(String.format("The room %s is already booked", room.getRoomNum()));
                     }
                 }                            
