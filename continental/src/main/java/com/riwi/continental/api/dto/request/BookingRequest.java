@@ -26,18 +26,9 @@ public class BookingRequest {
     @Future(message = "The departure date can't be in the past")
     private LocalDate departureDate;
 
-    @NotNull(message = "The departure time is required")
-    private LocalTime departureTime;
-
-    @NotNull(message = "The admission time is required")
-    private LocalTime admissionTime;
-
     @NotNull(message = "The customer id is required")
     private String customerId;
 
     @NotNull(message = "The rooms id are required")
     private List<String> listRoomId;
-
-    //@NotNull(message = "The guest id is required")
-    //private List<GuestToBookingRequest> listGuest;
 }

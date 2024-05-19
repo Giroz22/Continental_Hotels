@@ -2,6 +2,7 @@ package com.riwi.continental.infrastructure.services;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -163,14 +164,11 @@ public class BookingService implements IBookingService {
         return Booking.builder()
         .admissionDate(request.getAdmissionDate())
         .departureDate(request.getDepartureDate())
-        .admissionTime(request.getAdmissionTime())
-        .departureTime(request.getDepartureTime())
         .customer(customer)
         .rooms(listRooms)
         .guests(new ArrayList<Guest>())
         .price(price)
         .build();
-
     }
 
 

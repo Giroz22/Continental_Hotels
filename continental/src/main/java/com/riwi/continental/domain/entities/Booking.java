@@ -52,9 +52,9 @@ public class Booking {
     private LocalDate admissionDate;
     @Column(nullable = false)
     private LocalDate departureDate;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalTime admissionTime;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalTime departureTime;
 
     @Column(name = "modified_date")
