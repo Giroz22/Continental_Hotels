@@ -3,6 +3,7 @@ package com.riwi.continental.api.controller;
 import org.springframework.data.domain.Page;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,10 @@ import com.riwi.continental.api.dto.request.RoomRequest;
 import com.riwi.continental.api.dto.response.RoomResponse;
 import com.riwi.continental.infrastructure.abstract_services.IRoomService;
 
+
 import lombok.AllArgsConstructor;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,16 +34,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/rooms")
+@CrossOrigin(origins = "http://localhost:5173")
 public class RoomController {
     @Autowired
     private final IRoomService roomService;
+
     
     @GetMapping
     public ResponseEntity<Page<RoomResponse>> getAll(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(this.roomService.getAll(page - 1, size));
     }
-    
-
 
     @GetMapping("/{id}")
     public ResponseEntity<RoomResponse> getById(@PathVariable String id) {

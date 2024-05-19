@@ -12,6 +12,7 @@ import com.riwi.continental.infrastructure.abstract_services.IHotelService;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 @RequestMapping(path = "/hotels")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class HotelController {
 
     @Autowired
@@ -34,9 +36,8 @@ public class HotelController {
         return ResponseEntity.ok(this.iHotelService.getAll(page - 1, size));
     }
 
-    @PostMapping(path = "/add")
+    @PostMapping
     public ResponseEntity<HotelResponse> addHotel(@RequestBody HotelRequest hotelRequest) {
-
         return ResponseEntity.ok(this.iHotelService.create(hotelRequest));
     }
 
@@ -45,7 +46,7 @@ public class HotelController {
         return ResponseEntity.ok(this.iHotelService.findById(id));
     }
 
-    @PutMapping(path = "update/{id}")
+    @PutMapping(path = "/{id}")
     public ResponseEntity<HotelResponse> updateHotel(@PathVariable String id, @RequestBody HotelRequest hotelRequest) {
         return ResponseEntity.ok(this.iHotelService.update(hotelRequest, id));
     }

@@ -1,10 +1,15 @@
 package com.riwi.continental.infrastructure.services;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.riwi.continental.api.dto.request.RoomRequest;
 import com.riwi.continental.api.dto.response.FloorToHotelResponse;
@@ -22,6 +27,7 @@ import com.riwi.continental.util.exceptions.IdNotFoundException;
 
 import lombok.AllArgsConstructor;
 
+@Transactional
 @Service
 @AllArgsConstructor
 public class RoomService implements IRoomService{
@@ -41,22 +47,23 @@ public class RoomService implements IRoomService{
         return this.roomRepository.findAll(pagination).map(this::entityToResponse);
     }
 
+
     @Override
     public RoomResponse findById(String id) {
         return this.entityToResponse(this.find(id));
     }
 
     @Override
-    public RoomResponse create(RoomRequest entity) {
-       RoomType typeRoom = this.typeRoomRepository.findById(entity.getRoomTypeId()).orElseThrow(() -> new IdNotFoundException("room"));
-       Floor floor = this.floorRepository.findById(entity.getFloorId()).orElseThrow(() -> new IdNotFoundException("room"));
-
-        Room room = this.requestToRoom(entity, new Room());
-        
-
-        room.setRoomType(typeRoom);
-        room.setFloor(floor);
-
+    public RoomResponse create(RoomRequest entity)  {
+       
+        RoomType typeRoom = this.typeRoomRepository.findById(entity.getRoomTypeId()).orElseThrow(() -> new IdNotFoundException("room"));
+        Floor floor = this.floorRepository.findById(entity.getFloorId()).orElseThrow(() -> new IdNotFoundException("room"));
+ 
+    
+         Room room = this.requestToRoom(entity, new Room());
+         room.setRoomType(typeRoom);
+         room.setFloor(floor);
+         room.setPrice(typeRoom.getBaseValue().add(entity.getPrice()));
 
         return this.entityToResponse(this.roomRepository.save(room));
     }
@@ -70,8 +77,9 @@ public class RoomService implements IRoomService{
 
         room.setRoomType(typeRoom);
         room.setFloor(floor);
-        room.setState(request.getState());
+        room.setState(request.getState());    
         room = this.requestToRoom(request, room);
+        room.setPrice(typeRoom.getBaseValue().add(request.getPrice()));
         
 
         return this.entityToResponse(this.roomRepository.save(room));
