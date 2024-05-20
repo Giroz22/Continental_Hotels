@@ -19,6 +19,7 @@ import com.riwi.continental.infrastructure.abstract_services.IGuestService;
 import com.riwi.continental.util.enums.AgeCategory;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -45,6 +46,7 @@ public class GuestService implements IGuestService {
     return this.entityToResponse(this.find(id));
   }
 
+  @Transactional
   @Override
   public GuestResponse create(GuestRequest request) {
     Booking booking = this.bookingRepository.findById(request.getBookingId())
@@ -55,6 +57,7 @@ public class GuestService implements IGuestService {
     return this.entityToResponse(this.guestRepository.save(guest));
   }
 
+  @Transactional
   @Override
   public GuestResponse update(GuestRequest request, String id) {
     Guest guest = this.find(id);

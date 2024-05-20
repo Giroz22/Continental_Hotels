@@ -19,6 +19,7 @@ import com.riwi.continental.domain.repositories.HotelRepository;
 import com.riwi.continental.infrastructure.abstract_services.IHotelService;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -50,12 +51,14 @@ public class HotelService implements IHotelService {
         return this.hotelRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Hotel"));
     }
 
+    @Transactional
     @Override
     public HotelResponse create(HotelRequest hotelRequest) {
         Hotel hotel = this.hotelRequestToHotel(hotelRequest, new Hotel());
         return this.hotelToHotelResponse(this.hotelRepository.save(hotel));
     }
 
+    @Transactional
     @Override
     public HotelResponse update(HotelRequest hotelRequest, String id) {
         Hotel hotel = this.findHotelById(id);
