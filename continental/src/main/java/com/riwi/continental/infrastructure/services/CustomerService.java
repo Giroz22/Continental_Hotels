@@ -7,7 +7,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.riwi.continental.api.dto.request.CustomerRequest;
 import com.riwi.continental.api.dto.response.BookingToCustomerResponse;
@@ -25,6 +28,8 @@ import com.riwi.continental.domain.entities.RoomType;
 import com.riwi.continental.domain.repositories.CustomerRepository;
 import com.riwi.continental.infrastructure.abstract_services.ICustomerService;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -35,6 +40,9 @@ public class CustomerService implements ICustomerService {
 
   @Autowired
   private final CustomerRepository customerRepository;
+
+  @Autowired
+  private final RestTemplate restTemplate;
 
   @Override
   public Page<CustomerResponse> getAll(int page, int size) {
@@ -133,4 +141,14 @@ public class CustomerService implements ICustomerService {
     return roomTypeToAnyResponse;
   }
 
+  // Below we are going to connect the user made in the nestJS with the customer.
+  public Customer getUser(String token) {
+    String url = "http://auth-service/api/users/me";
+    HttpHeaders headers = new HttpHeaders();
+    headers.set("Authorization", "Bearer " + token);
+    HttpEntity<String> entity = new HttpEntity<>(headers);
+    ResponseEntity<Customer> response = restTemplate.exchange(url, HttpMethod.GET, entity, Customer.class);
+
+    return response.getBody();
+  }
 }
