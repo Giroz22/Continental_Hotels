@@ -62,6 +62,30 @@ El proyecto está dirigido a Continental Hotels y sus equipos administrativos y 
 14. Generación de reportes personalizados para huéspedes.
 
 ---
+## Arquitectura
+```
+continental/
+└── src/
+    └── main/
+        ├── java/
+        │   ├── api/
+        │   │   ├── controller/
+        │   │   ├── dto/
+        │   │   └── error_handler/
+        │   ├── config/
+        │   ├── domain/
+        │   │   ├── entities/
+        │   │   └── repositories/
+        │   ├── infraestructura/
+        │   │   ├── abstract_service/
+        │   │   └── service/
+        │   └── utils/
+        |   |   ├── enums/
+        │   │   └── exceptions/
+        └── resource/
+
+
+```
 
 ## TRELLO
 https://trello.com/b/EIHC6xAF/equipo-4
