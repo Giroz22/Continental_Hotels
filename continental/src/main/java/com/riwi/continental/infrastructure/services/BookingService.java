@@ -14,10 +14,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.riwi.continental.api.dto.request.BookingRequest;
+import com.riwi.continental.api.dto.request.GuestRequest;
 import com.riwi.continental.api.dto.request.GuestToBookingRequest;
 import com.riwi.continental.api.dto.response.BookingResponse;
+import com.riwi.continental.api.dto.response.BookingToGuestResponse;
 import com.riwi.continental.api.dto.response.CustomerToBookingResponse;
 import com.riwi.continental.api.dto.response.FloorToAny;
+import com.riwi.continental.api.dto.response.GuestResponse;
 import com.riwi.continental.api.dto.response.GuestToBookingResponse;
 import com.riwi.continental.api.dto.response.RoomToBookingResponse;
 import com.riwi.continental.api.dto.response.RoomTypeToAnyResponse;
@@ -32,6 +35,8 @@ import com.riwi.continental.domain.repositories.CustomerRepository;
 import com.riwi.continental.domain.repositories.GuestRepository;
 import com.riwi.continental.domain.repositories.RoomRepository;
 import com.riwi.continental.infrastructure.abstract_services.IBookingService;
+import com.riwi.continental.util.enums.AgeCategory;
+import com.riwi.continental.util.enums.StateRoom;
 import com.riwi.continental.util.enums.StatusBooking;
 import com.riwi.continental.util.exceptions.BookingException;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
@@ -95,6 +100,79 @@ public class BookingService implements IBookingService {
     public void delete(String id) {
         Booking booking = this.find(id);
         this.bookingRepository.delete(booking);
+    }
+
+    @Override
+    public BookingResponse checkIn(String idBooking, List<GuestToBookingRequest> listGuestRequest){
+        Booking booking = this.find(idBooking);
+
+        //Realizamos las validaciones
+        this.validateCheckIn(booking);
+
+        //Cambiamos el estado de la reserva
+        booking.setStatus(StatusBooking.INPROCESS);
+
+        //Asigna la hora actual
+        booking.setAdmissionTime(LocalTime.now());
+
+        //Cambia el estado de todas las habitacion reservadas
+        List<Room> listRooms = booking.getRooms();
+
+        for (Room room : listRooms) {
+            room.setState(StateRoom.RESERVED);
+            roomRepository.save(room);
+        }
+
+        //Agrega todos los huespedes a la reserva
+        List<Guest> listGuest = listGuestRequest.stream().map(
+            (GuestToBookingRequest guestRequest) -> this.requestToGuest(idBooking, guestRequest)
+        ).toList();
+
+        List<Guest> newGuestList = new ArrayList<>();
+        newGuestList.addAll(listGuest);
+        booking.setGuests(newGuestList);
+
+        //Guardamos el booking actualizado
+        Booking bookingUpdated = this.bookingRepository.save(booking);
+
+        return entityToResponse(bookingUpdated);
+    }
+
+    private void validateCheckIn(Booking booking){
+        String msjError = null;
+
+        //Validamos si ya se hizo check-in
+        boolean isBookinActive =  booking.getStatus() == StatusBooking.ACTIVE;
+
+        if (!isBookinActive) {
+            msjError = (String.format("checking cannot be done again"));
+        }
+
+        //Validamos si la fecha actual coincide con la de la reserva 
+        boolean isCheckinBefore = LocalDate.now().isBefore(booking.getAdmissionDate());
+        boolean isCheckinAfter = LocalDate.now().isAfter(booking.getAdmissionDate());
+
+        if (isCheckinBefore) {
+            msjError = (String.format("Check-in is not yet possible, the reservation is scheduled for %s", booking.getAdmissionDate()));
+        }
+
+        if (isCheckinAfter) {
+            msjError = (String.format("Check-in date expired on %s", booking.getAdmissionDate()));
+        }
+
+        //Validamos si ocurrio un error
+        if (msjError != null) {
+            throw new BookingException(msjError);
+        }
+    }
+
+    @Override
+    public BookingResponse checkOut(String id, List<GuestToBookingRequest> listGuestRequest){
+        Booking booking = this.find(id);
+
+
+        
+        return entityToResponse(booking);
     }
 
     //Domain logic
@@ -227,5 +305,16 @@ public class BookingService implements IBookingService {
         BeanUtils.copyProperties(floor, floorToAny);
 
         return floorToAny;
+    }
+
+    private Guest requestToGuest(String idBooking, GuestToBookingRequest request) {
+        return Guest.builder()
+        .idDocument(request.getIdDocument())
+        .name(request.getName())
+        .lastname(request.getLastname())
+        .age(request.getAge())
+        .ageCategory(AgeCategory.ADULT)
+        .booking(this.find(idBooking))
+        .build();
     }
 }
