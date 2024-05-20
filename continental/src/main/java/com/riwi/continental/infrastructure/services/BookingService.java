@@ -31,6 +31,7 @@ import com.riwi.continental.infrastructure.abstract_services.IBookingService;
 import com.riwi.continental.util.enums.StatusBooking;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -64,6 +65,7 @@ public class BookingService implements IBookingService {
         return this.entityToResponse(booking);
     }
 
+    @Transactional
     @Override
     public BookingResponse create(BookingRequest entity) {
         Customer customer = this.customerRepository.findById(entity.getCustomerId())
@@ -86,6 +88,7 @@ public class BookingService implements IBookingService {
 
     }
 
+    @Transactional
     @Override
     public BookingResponse update(BookingRequest entity, String id) {
         Booking bookingToUpdate = this.find(id);

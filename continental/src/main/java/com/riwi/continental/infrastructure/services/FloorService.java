@@ -26,6 +26,7 @@ import com.riwi.continental.infrastructure.abstract_services.IFloorService;
 import com.riwi.continental.util.enums.StatusFloor;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -58,6 +59,7 @@ public class FloorService implements IFloorService {
         return this.floorRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Floor"));
     }
 
+    @Transactional
     @Override
     public FloorResponse create(FloorRequest floorRequest) {
         Hotel hotel = this.hotelRepository.findById(floorRequest.getHotelId())
@@ -68,6 +70,7 @@ public class FloorService implements IFloorService {
         return this.floorToFloorResponse(this.floorRepository.save(floor));
     }
 
+    @Transactional
     @Override
     public FloorResponse update(FloorRequest floorRequest, String id) {
         Floor floor = this.findFloorById(id);
