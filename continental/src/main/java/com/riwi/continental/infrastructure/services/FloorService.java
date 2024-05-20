@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +22,7 @@ import com.riwi.continental.domain.entities.RoomType;
 import com.riwi.continental.domain.repositories.FloorRepository;
 import com.riwi.continental.domain.repositories.HotelRepository;
 import com.riwi.continental.infrastructure.abstract_services.IFloorService;
+import com.riwi.continental.util.enums.StateRoom;
 import com.riwi.continental.util.enums.StatusFloor;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
 
@@ -64,7 +64,7 @@ public class FloorService implements IFloorService {
                 .orElseThrow(() -> new IdNotFoundException("Hotel"));
         Floor floor = this.floorRequestToFloor(floorRequest, new Floor());
         floor.setHotel(hotel);
-
+        
         return this.floorToFloorResponse(this.floorRepository.save(floor));
     }
 
@@ -76,6 +76,7 @@ public class FloorService implements IFloorService {
         Hotel hotel = this.hotelRepository.findById(floorRequest.getHotelId())
                 .orElseThrow(() -> new IdNotFoundException("Hotel"));
         floor.setHotel(hotel);
+        floor.setStatusFloor(this.setFloorStatus(floor));
 
         return this.floorToFloorResponse(this.floorRepository.save(floor));
     }
@@ -121,5 +122,16 @@ public class FloorService implements IFloorService {
         BeanUtils.copyProperties(roomType, roomTypeToAnyResponse);
 
         return roomTypeToAnyResponse;
+    }
+
+    private StatusFloor setFloorStatus(Floor floor){
+        boolean isFull = floor.getRooms().stream().allMatch(room -> room.getState() == StateRoom.RESERVED);
+
+        if (isFull) {
+            return StatusFloor.FULLY_BOOKED;
+        }
+        else {
+            return StatusFloor.AVAILABLE;
+        }
     }
 }

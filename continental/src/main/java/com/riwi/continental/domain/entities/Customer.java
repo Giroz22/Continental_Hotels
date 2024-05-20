@@ -23,7 +23,6 @@ import lombok.ToString;
 public class Customer {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
   private String id;
 
   @Column(length = 45, nullable = false)

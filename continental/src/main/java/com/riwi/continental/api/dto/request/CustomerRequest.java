@@ -13,6 +13,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerRequest {
+
+  @NotNull
+  private String id;
+  
   @Size(min = 3, max = 40, message = "The name exceeds the numbers of characters allowed")
   @NotBlank(message = "name is required")
   private String name;

@@ -3,6 +3,7 @@ package com.riwi.continental.api.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import com.riwi.continental.infrastructure.abstract_services.ICustomerService;
 import lombok.AllArgsConstructor;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000/api")
 @RequestMapping(path = "/customer")
 @AllArgsConstructor
 public class CustomerController {

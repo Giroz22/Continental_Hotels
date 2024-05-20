@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 import com.riwi.continental.api.dto.request.HotelRequest;
 import com.riwi.continental.api.dto.response.FloorToHotelResponse;
 import com.riwi.continental.api.dto.response.HotelResponse;
+import com.riwi.continental.domain.entities.Booking;
 import com.riwi.continental.domain.entities.Floor;
 import com.riwi.continental.domain.entities.Hotel;
+import com.riwi.continental.domain.entities.Room;
 import com.riwi.continental.domain.repositories.HotelRepository;
 import com.riwi.continental.infrastructure.abstract_services.IHotelService;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
@@ -60,6 +62,8 @@ public class HotelService implements IHotelService {
     public HotelResponse update(HotelRequest hotelRequest, String id) {
         Hotel hotel = this.findHotelById(id);
         this.hotelRequestToHotel(hotelRequest, hotel);
+        hotel.setEarnings(this.calculateEarnings(hotel));
+
 
         return this.hotelToHotelResponse(this.hotelRepository.save(hotel));
     }
@@ -92,5 +96,19 @@ public class HotelService implements IHotelService {
         BeanUtils.copyProperties(floor, floorToHotelResponse);
 
         return floorToHotelResponse;
+    }
+
+    private double calculateEarnings(Hotel hotel){
+        double totalEarnings = 0;
+
+            for (Floor floor : hotel.getFloors()) {
+                for (Room room : floor.getRooms()) {
+                    for (Booking booking : room.getBookings()) {
+                        totalEarnings +=  booking.getPrice().doubleValue();
+                    }
+                }
+            }
+
+        return totalEarnings;
     }
 }
