@@ -99,7 +99,6 @@ public class CustomerService implements ICustomerService {
   // debe sarlir una lista en booking todas las reservas que tiene el cliente
 
   private Customer requestToEntity(CustomerRequest entity, Customer customer) {
-    customer.setName(entity.getName());
     customer.setLastname(entity.getLastname());
     customer.setAge(entity.getAge());
     customer.setIdDocument(entity.getIdDocument());
@@ -142,13 +141,28 @@ public class CustomerService implements ICustomerService {
   }
 
   // Below we are going to connect the user made in the nestJS with the customer.
+  @Override
   public Customer getUser(String token) {
-    String url = "http://auth-service/api/users/me";
+    String url = "http://localhost:3000/api";
     HttpHeaders headers = new HttpHeaders();
     headers.set("Authorization", "Bearer " + token);
     HttpEntity<String> entity = new HttpEntity<>(headers);
     ResponseEntity<Customer> response = restTemplate.exchange(url, HttpMethod.GET, entity, Customer.class);
 
-    return response.getBody();
+    Customer userFromAuthService = response.getBody();
+    if (userFromAuthService != null) {
+      Customer customer = this.find(userFromAuthService.getId());
+      if (customer == null) {
+        // Si no hay cliente asociado, crear uno nuevo
+        customer = new Customer();
+        customer.setId(userFromAuthService.getId());
+        customer.setName(userFromAuthService.getName());
+        customer = customerRepository.save(customer);
+      }
+      return customer;
+    }
+
+    return null;
   }
+
 }
