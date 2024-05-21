@@ -101,12 +101,19 @@ https://trello.com/b/EIHC6xAF/equipo-4
 ![DiagramaArquitectura](https://github.com/Giroz22/Continental_Hotels/assets/147103562/59deb77b-a06e-4df1-b06f-a9ec8676dd4c)
 
 
+## Requerimientos para ejecutar el programa
+
+1. El programa utiliza la version 17 de java en el editor de codigo
+2. Debe tener intalado Xampp
+3. Debe tener instalado MySQL workbench
+
 ## Ejecucion del programa
 
 1. Si es desde un sistema operativo windows abrir el programa xampp
 2. Dar start a mysql
 3. Abrir mysql en workbench en el puerto local
 4. Ejecutar el comando `CREATE DATABASE continental;` para crear la base de datos.
-5. Abrir postman mediante el siguiente enlace:  https://www.postman.com/continentalhotels/workspace/team-workspace/collection/34443806-c4d1d105-a0ed-47e2-a967-38782e860246?action=share&creator=34443806
-6. Seleccionar la consulta que desea realizar e ingresar datos de ser necesarios para probar la 
+5. Ejecutar el programa desde el editor de codigo
+6. Abrir postman mediante el siguiente enlace:  https://www.postman.com/continentalhotels/workspace/team-workspace/collection/34443806-c4d1d105-a0ed-47e2-a967-38782e860246?action=share&creator=34443806
+7. Seleccionar la consulta que desea realizar e ingresar datos de ser necesarios para probar la 
 funcionalidad del programa.
