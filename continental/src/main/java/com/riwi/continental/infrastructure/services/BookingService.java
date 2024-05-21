@@ -39,6 +39,7 @@ import com.riwi.continental.util.enums.StatusBooking;
 import com.riwi.continental.util.exceptions.BookingException;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -72,6 +73,7 @@ public class BookingService implements IBookingService {
         return this.entityToResponse(booking);
     }
 
+    @Transactional
     @Override
     public BookingResponse create(BookingRequest request) {      
         Booking booking = this.requestToEntity(request, new Booking());
@@ -81,6 +83,7 @@ public class BookingService implements IBookingService {
         return this.entityToResponse(this.bookingRepository.save(booking));
     }
 
+    @Transactional
     @Override
     public BookingResponse update(BookingRequest request, String id) {
         Booking bookingToUpdate = this.find(id);

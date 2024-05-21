@@ -17,6 +17,7 @@ import com.riwi.continental.domain.entities.RoomType;
 import com.riwi.continental.domain.repositories.RoomTypeRepository;
 import com.riwi.continental.infrastructure.abstract_services.IRoomTypeService;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -39,12 +40,14 @@ public class TypeRoomService implements IRoomTypeService {
         return this.entityToResponse(typeRoom);
     }
 
+    @Transactional
     @Override
     public RoomTypeResponse create(RoomTypeRequest request) {
        RoomType typeRoom = this.requestToEntity(request, new RoomType());
        return this.entityToResponse(this.typeRoomRepository.save(typeRoom));
     }
 
+    @Transactional
     @Override
     public RoomTypeResponse update(RoomTypeRequest request, String id) {
         RoomType typeRoomToUpdate = this.find(id);

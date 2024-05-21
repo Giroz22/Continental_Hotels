@@ -26,6 +26,7 @@ import com.riwi.continental.domain.repositories.CustomerRepository;
 import com.riwi.continental.infrastructure.abstract_services.ICustomerService;
 import com.riwi.continental.util.exceptions.IdNotFoundException;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -50,12 +51,14 @@ public class CustomerService implements ICustomerService {
     return this.entityToResponse(customer);
   }
 
+  @Transactional
   @Override
   public CustomerResponse create(CustomerRequest request) {
     Customer customer = this.requestToEntity(request, new Customer());
     return this.entityToResponse(this.customerRepository.save(customer));
   }
 
+  @Transactional
   @Override
   public CustomerResponse update(CustomerRequest request, String id) {
     Customer customerToUpdate = this.find(id);
