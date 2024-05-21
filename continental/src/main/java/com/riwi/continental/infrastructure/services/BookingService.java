@@ -14,13 +14,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.riwi.continental.api.dto.request.BookingRequest;
-import com.riwi.continental.api.dto.request.GuestRequest;
 import com.riwi.continental.api.dto.request.GuestToBookingRequest;
 import com.riwi.continental.api.dto.response.BookingResponse;
-import com.riwi.continental.api.dto.response.BookingToGuestResponse;
 import com.riwi.continental.api.dto.response.CustomerToBookingResponse;
 import com.riwi.continental.api.dto.response.FloorToAny;
-import com.riwi.continental.api.dto.response.GuestResponse;
 import com.riwi.continental.api.dto.response.GuestToBookingResponse;
 import com.riwi.continental.api.dto.response.RoomToBookingResponse;
 import com.riwi.continental.api.dto.response.RoomTypeToAnyResponse;
@@ -28,11 +25,12 @@ import com.riwi.continental.domain.entities.Booking;
 import com.riwi.continental.domain.entities.Customer;
 import com.riwi.continental.domain.entities.Floor;
 import com.riwi.continental.domain.entities.Guest;
+import com.riwi.continental.domain.entities.Hotel;
 import com.riwi.continental.domain.entities.Room;
 import com.riwi.continental.domain.entities.RoomType;
 import com.riwi.continental.domain.repositories.BookingRepository;
 import com.riwi.continental.domain.repositories.CustomerRepository;
-import com.riwi.continental.domain.repositories.GuestRepository;
+import com.riwi.continental.domain.repositories.HotelRepository;
 import com.riwi.continental.domain.repositories.RoomRepository;
 import com.riwi.continental.infrastructure.abstract_services.IBookingService;
 import com.riwi.continental.util.enums.AgeCategory;
@@ -54,10 +52,10 @@ public class BookingService implements IBookingService {
     private final CustomerRepository customerRepository;
 
     @Autowired
-    private final GuestRepository guestRepository;
+    private final RoomRepository roomRepository;
 
     @Autowired
-    private final RoomRepository roomRepository;
+    private final HotelRepository hotelRepository;
 
     @Override
     public Page<BookingResponse> getAll(int page, int size) {
@@ -106,16 +104,16 @@ public class BookingService implements IBookingService {
     public BookingResponse checkIn(String idBooking, List<GuestToBookingRequest> listGuestRequest){
         Booking booking = this.find(idBooking);
 
-        //Realizamos las validaciones
+        //Realize validations
         this.validateCheckIn(booking);
 
-        //Cambiamos el estado de la reserva
+        //Change reservation status
         booking.setStatus(StatusBooking.INPROCESS);
 
-        //Asigna la hora actual
+        //Assigns the current time
         booking.setAdmissionTime(LocalTime.now());
 
-        //Cambia el estado de todas las habitacion reservadas
+        //Changes the status of all booked rooms
         List<Room> listRooms = booking.getRooms();
 
         for (Room room : listRooms) {
@@ -123,7 +121,7 @@ public class BookingService implements IBookingService {
             roomRepository.save(room);
         }
 
-        //Agrega todos los huespedes a la reserva
+        //Adds all guests to the reservation
         List<Guest> listGuest = listGuestRequest.stream().map(
             (GuestToBookingRequest guestRequest) -> this.requestToGuest(idBooking, guestRequest)
         ).toList();
@@ -132,7 +130,7 @@ public class BookingService implements IBookingService {
         newGuestList.addAll(listGuest);
         booking.setGuests(newGuestList);
 
-        //Guardamos el booking actualizado
+        //We keep the booking updated
         Booking bookingUpdated = this.bookingRepository.save(booking);
 
         return entityToResponse(bookingUpdated);
@@ -141,14 +139,14 @@ public class BookingService implements IBookingService {
     private void validateCheckIn(Booking booking){
         String msjError = null;
 
-        //Validamos si ya se hizo check-in
+        //We validate if you have already check-in.
         boolean isBookinActive =  booking.getStatus() == StatusBooking.ACTIVE;
 
         if (!isBookinActive) {
             msjError = (String.format("checking cannot be done again"));
         }
 
-        //Validamos si la fecha actual coincide con la de la reserva 
+        //Validate if the current date is the same as the booking date 
         boolean isCheckinBefore = LocalDate.now().isBefore(booking.getAdmissionDate());
         boolean isCheckinAfter = LocalDate.now().isAfter(booking.getAdmissionDate());
 
@@ -160,7 +158,7 @@ public class BookingService implements IBookingService {
             msjError = (String.format("Check-in date expired on %s", booking.getAdmissionDate()));
         }
 
-        //Validamos si ocurrio un error
+        //Validate if an error occurred
         if (msjError != null) {
             throw new BookingException(msjError);
         }
@@ -170,9 +168,59 @@ public class BookingService implements IBookingService {
     public BookingResponse checkOut(String id, List<GuestToBookingRequest> listGuestRequest){
         Booking booking = this.find(id);
 
+        //Validations
+        this.validateCheckOut(booking);
 
+        //Change reservation status
+        booking.setStatus(StatusBooking.FINISHED);
+
+        //Assigns the current time
+        booking.setDepartureTime(LocalTime.now());
+
+        //Changes the status of all booked rooms
+        List<Room> listRooms = booking.getRooms();
+
+        for (Room room : listRooms) {
+            room.setState(StateRoom.AVAILABLE);
+            roomRepository.save(room);
+        }
+
+        // Let's add the profits to the hotel
+        Hotel hotel = booking.getRooms().get(0).getFloor().getHotel();
+        hotel.setEarnings(hotel.getEarnings() + booking.getPrice().floatValue());
+        this.hotelRepository.save(hotel);
         
         return entityToResponse(booking);
+    }
+
+    private void validateCheckOut(Booking booking){
+        String msjError = null;
+
+        //Validate if the booking is in process 
+        boolean isBookinInProcess =  booking.getStatus() == StatusBooking.INPROCESS;
+
+        if (!isBookinInProcess) {
+            msjError = (String.format("check-out cannot be done again"));
+        }
+
+        //Validate if the current date is the same as the booking date 
+        boolean isCheckoutBefore = booking.getDepartureDate().isBefore(booking.getAdmissionDate());
+
+        boolean isCheckoutAfter = LocalDate.now().isAfter(booking.getDepartureDate());
+
+        if (isCheckoutBefore) {
+            msjError = ("It is not possible to checkout before checkin");
+        }
+
+        //If the checkout is after the booked date the booking price increases
+        if (isCheckoutAfter) {
+            booking.setPrice(booking.getPrice().add(calculatePriceBooking(booking.getRooms(), booking.getDepartureDate(),LocalDate.now())));
+        }
+
+        //Validate if an error occurred
+        if (msjError != null) {
+            throw new BookingException(msjError);
+        }
     }
 
     //Domain logic
@@ -220,7 +268,8 @@ public class BookingService implements IBookingService {
         return priceBooking;
     }
 
-    // Metodo para convertir una entidad en el dto de respuesta de la entidad
+    // Methods to convert an entity to the entity's response data
+
     private Booking requestToEntity(BookingRequest request, Booking booking) {        
         Customer customer = this.customerRepository.findById(request.getCustomerId()).orElseThrow(
             () -> new IdNotFoundException("customer")

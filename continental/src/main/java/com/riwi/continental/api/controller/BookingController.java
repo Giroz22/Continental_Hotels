@@ -1,6 +1,5 @@
 package com.riwi.continental.api.controller;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.riwi.continental.api.dto.request.BookingRequest;
-import com.riwi.continental.api.dto.request.GuestRequest;
 import com.riwi.continental.api.dto.request.GuestToBookingRequest;
 import com.riwi.continental.api.dto.response.BookingResponse;
 import com.riwi.continental.infrastructure.abstract_services.IBookingService;
@@ -78,7 +76,13 @@ public class BookingController {
     public ResponseEntity<BookingResponse> checkIn(@PathVariable String id, @RequestBody GuestToBookingRequest[] guests) {
 
         List<GuestToBookingRequest> listGuests = Arrays.asList(guests);
-        System.out.println(listGuests.toString());
         return ResponseEntity.ok().body(this.bookingService.checkIn(id, listGuests));
+    }
+
+    @PutMapping(path = "/checkout/{id}")
+    public ResponseEntity<BookingResponse> checkOut(@PathVariable String id, @RequestBody GuestToBookingRequest[] guests) {
+
+        List<GuestToBookingRequest> listGuests = Arrays.asList(guests);
+        return ResponseEntity.ok().body(this.bookingService.checkOut(id, listGuests));
     }
 }

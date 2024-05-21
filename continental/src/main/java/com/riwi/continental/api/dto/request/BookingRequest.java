@@ -1,7 +1,6 @@
 package com.riwi.continental.api.dto.request;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 import jakarta.validation.constraints.Future;
