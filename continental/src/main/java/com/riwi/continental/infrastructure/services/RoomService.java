@@ -1,5 +1,6 @@
 package com.riwi.continental.infrastructure.services;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
@@ -25,6 +26,7 @@ import com.riwi.continental.domain.repositories.FloorRepository;
 import com.riwi.continental.domain.repositories.RoomRepository;
 import com.riwi.continental.domain.repositories.RoomTypeRepository;
 import com.riwi.continental.infrastructure.abstract_services.IRoomService;
+import com.riwi.continental.util.exceptions.IdNotFoundException;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -57,13 +59,14 @@ public class RoomService implements IRoomService {
     @Transactional
     @Override
     public RoomResponse create(RoomRequest entity) {
-        RoomType typeRoom = this.typeRoomRepository.findById(entity.getRoomTypeId()).orElseThrow();
-        Floor floor = this.floorRepository.findById(entity.getFloorId()).orElseThrow();
-
+        RoomType typeRoom = this.typeRoomRepository.findById(entity.getRoomTypeId()).orElseThrow(() -> new IdNotFoundException("Room type"));
+        Floor floor = this.floorRepository.findById(entity.getFloorId()).orElseThrow(() -> new IdNotFoundException("Floor"));
+        
         Room room = this.requestToRoom(entity, new Room());
 
         room.setRoomType(typeRoom);
         room.setFloor(floor);
+        room.setBookings(new ArrayList<>());
 
         return this.entityToResponse(this.roomRepository.save(room));
     }
@@ -72,8 +75,8 @@ public class RoomService implements IRoomService {
     @Override
     public RoomResponse update(RoomRequest request, String id) {
         Room room = this.find(id);
-        RoomType typeRoom = this.typeRoomRepository.findById(request.getRoomTypeId()).orElseThrow();
-        Floor floor = this.floorRepository.findById(request.getFloorId()).orElseThrow();
+        RoomType typeRoom = this.typeRoomRepository.findById(request.getRoomTypeId()).orElseThrow(() -> new IdNotFoundException("Room Type"));
+        Floor floor = this.floorRepository.findById(request.getFloorId()).orElseThrow(() -> new IdNotFoundException("Floor"));;
 
         room.setRoomType(typeRoom);
         room.setFloor(floor);
@@ -112,7 +115,7 @@ public class RoomService implements IRoomService {
     }
 
     private Room find(String id) {
-        return this.roomRepository.findById(id).orElseThrow();
+        return this.roomRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Room"));
     }
 
     private BookingToRoomsResponse bookingToBookingToRoomsResponse(Booking booking) {

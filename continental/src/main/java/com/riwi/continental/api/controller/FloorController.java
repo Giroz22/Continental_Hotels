@@ -46,7 +46,7 @@ public class FloorController {
     @Operation(summary = "This method allows create a floor with the dates sent")
     @ApiResponse(responseCode = "400", description = "When there is an error in the date sent to the datebase", content = {
         @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorsResponse.class))})
-    @PostMapping(path = "/add")
+    @PostMapping
     public ResponseEntity<FloorResponse> addFloor(@Validated @RequestBody FloorRequest floorRequest) {
 
         return ResponseEntity.ok(this.iFloorService.create(floorRequest));
@@ -63,7 +63,7 @@ public class FloorController {
     @Operation(summary = "This method allows you modify a floor for a id especific")
     @ApiResponse(responseCode = "400", description = "When the id it's not valid", content = {
         @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
-    @PutMapping(path = "/update/{id}")
+    @PutMapping(path = "/{id}")
     public ResponseEntity<FloorResponse> updateFloor(@PathVariable String id,
             @Validated @RequestBody FloorRequest floorRequest) {
 

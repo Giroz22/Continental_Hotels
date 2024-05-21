@@ -46,7 +46,7 @@ public class HotelController {
     @Operation(summary = "This method allows create a hotel with the dates sent")
     @ApiResponse(responseCode = "400", description = "When there is an error in the date sent to the datebase", content = {
         @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorsResponse.class))})
-    @PostMapping(path = "/add")
+    @PostMapping
     public ResponseEntity<HotelResponse> addHotel(@RequestBody HotelRequest hotelRequest) {
 
         return ResponseEntity.ok(this.iHotelService.create(hotelRequest));
@@ -63,7 +63,7 @@ public class HotelController {
     @Operation(summary = "This method allows you modify a hotel for a id especific")
     @ApiResponse(responseCode = "400", description = "When the id it's not valid", content = {
         @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))})
-    @PutMapping(path = "update/{id}")
+    @PutMapping(path = "/{id}")
     public ResponseEntity<HotelResponse> updateHotel(@PathVariable String id, @RequestBody HotelRequest hotelRequest) {
         return ResponseEntity.ok(this.iHotelService.update(hotelRequest, id));
     }

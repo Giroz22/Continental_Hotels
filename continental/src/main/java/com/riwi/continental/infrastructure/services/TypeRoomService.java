@@ -16,6 +16,7 @@ import com.riwi.continental.domain.entities.Room;
 import com.riwi.continental.domain.entities.RoomType;
 import com.riwi.continental.domain.repositories.RoomTypeRepository;
 import com.riwi.continental.infrastructure.abstract_services.IRoomTypeService;
+import com.riwi.continental.util.exceptions.IdNotFoundException;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -84,7 +85,7 @@ public class TypeRoomService implements IRoomTypeService {
     }
 
     private RoomType find(String id){
-        return this.typeRoomRepository.findById(id).orElseThrow();
+        return this.typeRoomRepository.findById(id).orElseThrow(() -> new IdNotFoundException("Type Room"));
     }
 
 }

@@ -38,7 +38,7 @@ public class Room {
     @Enumerated(EnumType.STRING)
     private StateRoom state;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @Min(value = 0)
     private int roomNum;
 
@@ -52,10 +52,14 @@ public class Room {
     @Lob
     private String description;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "roomType_id", referencedColumnName = "id")
     private RoomType roomType;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "floor_id", referencedColumnName = "id")
     private Floor floor;
