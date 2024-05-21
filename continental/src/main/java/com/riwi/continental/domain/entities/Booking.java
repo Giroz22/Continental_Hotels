@@ -30,6 +30,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -40,6 +41,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@Builder
 public class Booking {
 
     @Id
@@ -50,9 +52,9 @@ public class Booking {
     private LocalDate admissionDate;
     @Column(nullable = false)
     private LocalDate departureDate;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalTime admissionTime;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalTime departureTime;
 
     @Column(name = "modified_date")

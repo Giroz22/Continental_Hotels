@@ -1,7 +1,7 @@
 package com.riwi.continental.api.dto.request;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.List;
 
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
@@ -25,18 +25,9 @@ public class BookingRequest {
     @Future(message = "The departure date can't be in the past")
     private LocalDate departureDate;
 
-    @NotNull(message = "The departure time is required")
-    private LocalTime departureTime;
-
-    @NotNull(message = "The admission time is required")
-    private LocalTime admissionTime;
-
     @NotNull(message = "The customer id is required")
     private String customerId;
 
-    @NotNull(message = "The room id is required")
-    private String roomId;
-
-    @NotNull(message = "The guest id is required")
-    private String guestId;
+    @NotNull(message = "The rooms id are required")
+    private List<String> listRoomId;
 }

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GuestRequest {
+public class GuestToBookingRequest {
   @NotBlank(message = "The id document is required")
   @Size(min = 3, max = 20, message = "The id document exceeds the numbers of characters allowed")
   private String idDocument;
@@ -28,6 +28,4 @@ public class GuestRequest {
   private int age;
   @NotNull(message = "The age category is required")
   private AgeCategory ageCategory;
-  @NotBlank(message = "The booking id is required")
-  private String bookingId;
 }
