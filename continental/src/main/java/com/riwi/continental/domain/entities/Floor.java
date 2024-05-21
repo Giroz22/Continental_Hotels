@@ -32,7 +32,7 @@ public class Floor {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private int number;
 
     @Column(length = 25, nullable = false)
